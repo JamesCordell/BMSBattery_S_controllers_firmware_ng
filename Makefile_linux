@@ -8,8 +8,8 @@
 
 #Compiler
 CC = sdcc
-OBJCOPY = stm8-objcopy
-SIZE = stm8-size
+OBJCOPY=$(STM8BINUTILS)/objcopy
+SIZE=$(STM8BINUTILS)/size
 
 #Platform
 PLATFORM = stm8

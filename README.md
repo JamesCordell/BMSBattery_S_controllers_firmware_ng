@@ -51,3 +51,28 @@ The corresponding thread in the german Pedelecforum [can be found here](https://
 ## Want to help
 
 There is always things to improve, don't hesitate to get involved if you have improvements in mind.
+
+## Build instructions on Linux
+
+1. First download and install https://stm8-binutils-gdb.sourceforge.io/
+
+2. Point the environment variable to the source directory of binutils. like below.
+export STM8BINUTILS=../stm8-binutils-gdb-sources/binutils-2.30/binutils/
+
+3. Install SDCC (Small device C Compiler)
+    sudo apt install sdcc git minicom
+
+4. clone this repo and enter into it.
+    git clone https://github.com/JamesCordell/BMSBattery_S_controllers_firmware_ng
+    cd BMSBattery_S_controllers_firmware_ng
+
+5. Read the config.h and adjust as appropriate.
+
+6. mv Makefile_linux Makefile
+
+7. make clean
+   make flash
+
+8. Login and view if the software is running. 
+   minicom -D /dev/ttyUSB0 -s 9600
+
