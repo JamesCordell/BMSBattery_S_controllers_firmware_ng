@@ -62,24 +62,24 @@ There is always things to improve, don't hesitate to get involved if you have im
 1. First download and install https://stm8-binutils-gdb.sourceforge.io/
 
 2. Point the environment variable to the source directory of binutils. like below.
-    ```export STM8BINUTILS=/home/username/stm8-binutils-gdb-sources/binutils-2.30/binutils/```
+    export STM8BINUTILS=/home/username/stm8-binutils-gdb-sources/binutils-2.30/binutils/
 
 3. Install SDCC (Small device C Compiler)
-    ```sudo apt install sdcc git minicom```
+    sudo apt install sdcc git minicom
 
 4. clone this repo and enter into it.
-    ```git clone https://github.com/JamesCordell/BMSBattery_S_controllers_firmware_ng```
-    ```cd BMSBattery_S_controllers_firmware_ng```
+    git clone https://github.com/JamesCordell/BMSBattery_S_controllers_firmware_ng
+    cd BMSBattery_S_controllers_firmware_ng
 
 5. Read the config.h and adjust as appropriate.
 
 6. mv Makefile_linux Makefile
 
-7. ```make unlock```    # This step will remove the existing from the stm8 chip, after this it is not possible to restore the original software
-   ```make clean```
-   ```make all```
-   ```make flash```     # You will need a stm8 flash usb key for this step.
+7. make unlock    # This step will remove the existing from the stm8 chip, after this it is not possible to restore the original software
+   make clean
+   make all
+   make flash     # You will need a stm8 flash usb key for this step.
 
 8. Login and view if the software is running. You will need a serial adapter for this step.
-   ```minicom -D /dev/ttyUSB0 -s 9600```
+   minicom -D /dev/ttyUSB0 -s 9600
 
