@@ -21,18 +21,18 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
 #include "config.h"
 
-void display_init();
-void display_update();
+void display_init(void);
+void display_update(void);
 //void display_debug(HardwareSerial* localSerial);
 
 //void display_show_important_info(const char *str, int duration_secs);
 //void display_show_important_info(const __FlashStringHelper *str, int duration_secs);
 
-void display_show_welcome_msg();
-void display_show_welcome_msg_temp();
+void display_show_welcome_msg(void);
+void display_show_welcome_msg_temp(void);
 
-void display_prev_view();
-void display_next_view();
+void display_prev_view(void);
+void display_next_view(void);
 
 
 

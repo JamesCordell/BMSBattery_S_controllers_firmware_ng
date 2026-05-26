@@ -19,7 +19,7 @@ uint8_t uart_get_packet_start_pos(void);
 uint8_t byte_avail_at_position(void);
 uint8_t uart_get_buffered(void);
 void uart_put_buffered(uint8_t c);
-void uart_send_if_avail();
+void uart_send_if_avail(void);
 void uart_fill_rx_packet_buffer(uint8_t *buffer, uint8_t bufferSize, uint8_t *bufferPos);
 
 void uart_init (void);

@@ -40,5 +40,5 @@ extern uint8_t ui8_log;
 extern uint8_t ui8_slowloop_flag;	//Flag for slow loop timing
 
 
-uint8_t update_advance_angle();
+uint8_t update_advance_angle(void);
 #endif

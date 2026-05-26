@@ -149,7 +149,7 @@ void hall_sensors_read_and_action(void) {
 	}
 }
 
-void updateCorrection() {
+void updateCorrection(void) {
 
 	if (ui8_duty_cycle_target > 5) {
 		ui16_ADC_iq_current_accumulated -= ui16_ADC_iq_current_accumulated >> 3;

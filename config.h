@@ -8,20 +8,22 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define NUMBER_OF_PAS_MAGS 12                   # The number of magnets on the crank used by the PAS sensor.
-#define limit 15                                # Overall maximum speed limit
-#define limit_with_throttle_override 40
-#define limit_without_pas 80                    # The speed limit without pedal asssit.
-#define timeout 3125        
-#define wheel_circumference 2040L               # The distance in mm the wheel covers in one revolution. 
+/* Unless there is a L in the number all values can only be a minimum of 0 through to 255*/
 
-#define ADC_THROTTLE_MIN_VALUE 46               # The Miinimum throttle value
-#define ADC_THROTTLE_MAX_VALUE 180              # The Maximum throttle value
+#define NUMBER_OF_PAS_MAGS 12                   // The number of magnets on the crank used by the PAS sensor.
+#define limit 80                                // Overall maximum speed limit, all speeds are in k/h
+#define limit_with_throttle_override 80
+#define limit_without_pas 80                    // The speed limit without pedal asssit.
+#define timeout 3125U
+#define wheel_circumference 2040L               // The distance in mm the wheel covers in one revolution. 
 
-#define BATTERY_VOLTAGE_MIN_VALUE 300           # Used to calibrate how full the battery is.
-#define BATTERY_VOLTAGE_MAX_VALUE 650
+#define ADC_THROTTLE_MIN_VALUE 46               // The Miinimum throttle value
+#define ADC_THROTTLE_MAX_VALUE 180              // The Maximum throttle value
 
-#define BATTERY_CURRENT_MAX_VALUE 220L          # Limits the maximum current.
+#define BATTERY_VOLTAGE_MIN_VALUE 0           // Used to calibrate how full the battery is.
+#define BATTERY_VOLTAGE_MAX_VALUE 255
+
+#define BATTERY_CURRENT_MAX_VALUE 220L          // Limits the maximum current.
 #define PHASE_CURRENT_MAX_VALUE 100L
 #define REGEN_CURRENT_MAX_VALUE 40L
 #define current_cal_a 1
@@ -51,20 +53,16 @@
 
 /* Set one type of display type. */
 //#define DISPLAY_TYPE_KT_LCD3
-//#define BLUOSEC                               # Bluetooth on the serial port and phone app.
-//#define DISPLAY_TYPE DISPLAY_TYPE_KINGMETER_618U
-//#define DISPLAY_TYPE DISPLAY_TYPE_KINGMETER_901U
-#define DIAGNOSTICS                             # Serial 9600 8N1 
+//#define BLUOSEC                               // Bluetooth on the serial port and phone app.
+
+/* enable these lines to set this display type.
+#define DISPLAY_TYPE_KINGMETER_618U (1<<4)      // King-Meter 618U protocol (KM5s, EBS-LCD2, J-LCD, SW-LCD)
+#define DISPLAY_TYPE_KINGMETER (DISPLAY_TYPE_KINGMETER_618U|DISPLAY_TYPE_KINGMETER_901U)
+#define DISPLAY_TYPE DISPLAY_TYPE_KINGMETER     // Set your display type here. CHANGES ONLY HERE!
+*/
+#define DIAGNOSTICS                             // Serial 9600 8N1 
 
 #define ANGLE_4_0 1
-<<<<<<< Updated upstream
-#define ANGLE_6_60 41
-#define ANGLE_2_120 84
-#define ANGLE_3_180 129
-#define DISPLAY_TYPE_KT_LCD3
-#define ANGLE_1_240 167
-#define ANGLE_5_300 212
-=======
 #define ANGLE_6_60 43
 #define ANGLE_2_120 86
 #define ANGLE_3_180 128
@@ -72,7 +70,6 @@
 #define ANGLE_5_300 213
 
 
->>>>>>> Stashed changes
 #define TQS_CALIB 0.0
 #define ACA 128 + 4096 + 512 + 8192
 
@@ -92,7 +89,7 @@
 // IdleDisablesOffroad	+ 16384
 // ExternalSpeedSensor	+ 8192
 
-#define EEPROM_INIT_MAGIC_BYTE 240 // makes sure (chance of fail 1/255) eeprom is invalidated after flashing new config
+#define EEPROM_INIT_MAGIC_BYTE 240              // makes sure (chance of fail 1/255) eeprom is invalidated after flashing new config
 #define ADC_BATTERY_VOLTAGE_K 80
 #define ACA_EXPERIMENTAL 128 + 8
 

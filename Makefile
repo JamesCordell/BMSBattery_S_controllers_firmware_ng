@@ -6,6 +6,10 @@
 
 .PHONY: all clean
 
+ifndef STM8BINUTILS
+    $(error The environment variable 'STM8BINUTILS' is not defined. Please set it before running make)
+endif
+
 #Compiler
 CC = sdcc
 OBJCOPY=$(STM8BINUTILS)/objcopy
@@ -56,15 +60,14 @@ EXTRASRCS = \
 	display.c \
 	display_kingmeter.c
 
-HEADERS = BOdisplay.h ACAcommons.h ACAsetPoint.h ACAcontrollerState.h ACAeeprom.h  adc.h  brake.h  cruise_control.h  gpio.h  interrupts.h  main.h  motor.h  pwm.h  timers.h  uart.h  PAS.h  SPEED.h  
+HEADERS= BOdisplay.h ACAcommons.h ACAsetPoint.h ACAcontrollerState.h ACAeeprom.h adc.h  brake.h  cruise_control.h  gpio.h  interrupts.h  main.h  motor.h  pwm.h  timers.h  uart.h  PAS.h  SPEED.h
 
 # The list of .rel files can be derived from the list of their source files
 RELS = $(EXTRASRCS:.c=.rel)
 
 INCLUDES = -I$(IDIR) -I. 
 CFLAGS   = -m$(PLATFORM) --std-c99 --nolospre
-#ELF_FLAGS = --out-fmt-elf --debug
-ELF_FLAGS = --out-fmt-elf
+ELF_FLAGS = --out-fmt-elf  #--debug
 LIBS     = 
 
 # This just provides the conventional target name "all"; it is optional
@@ -76,7 +79,7 @@ $(PNAME): $(MAINSRC) $(RELS)
 	$(CC) $(INCLUDES) $(CFLAGS) $(ELF_FLAGS) $(LIBS) $(MAINSRC) $(RELS)
 	$(SIZE) $(PNAME).elf -A
 	$(OBJCOPY) -O binary $(ELF_SECTIONS_TO_REMOVE) $(PNAME).elf $(PNAME).bin
-	$(OBJCOPY) -O ihex $(ELF_SECTIONS_TO_REMOVE) $(PNAME).elf $(PNAME).hex
+#	$(OBJCOPY) -O ihex $(ELF_SECTIONS_TO_REMOVE) $(PNAME).elf $(PNAME).hex
 
 # How to build any .rel file from its corresponding .c file
 # GNU would have you use a pattern rule for this, but that's GNU-specific

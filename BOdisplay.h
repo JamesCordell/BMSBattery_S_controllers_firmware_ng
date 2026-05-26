@@ -173,7 +173,7 @@ typedef enum {
 	ERROR_ADDRESS = ((uint8_t) 0x66)
 } BO_ADDRESS_CODES;
 
-void display_update();
-void display_init();
+void display_update(void);
+void display_init(void);
 
 #endif /* BODISPLAY_H */

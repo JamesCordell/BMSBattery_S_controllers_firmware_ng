@@ -58,7 +58,7 @@ uint16_t cutoffSetpoint(uint32_t ui32_dutycycle) {
 	return ui32_dutycycle;
 }
 
-BitStatus checkMaxErpsOverride(){
+BitStatus checkMaxErpsOverride(void){
 	if (ui32_erps_filtered > ui16_erps_max) {
 		ui32_dutycycle = PI_control(ui32_erps_filtered, ui16_erps_max,uint_PWM_Enable); //limit the erps to maximum value to have minimum 30 points of sine table for proper commutation
 		controll_state_temp +=1024;
@@ -67,7 +67,7 @@ BitStatus checkMaxErpsOverride(){
 	return 0;
 }
 
-BitStatus checkUnderVoltageOverride(){
+BitStatus checkUnderVoltageOverride(void){
 	//check for undervoltage --> ramp down power starting 6.25% above min
 	ui8_temp = ui8_s_battery_voltage_min + (ui8_s_battery_voltage_min>>4);
 	if (ui8_BatteryVoltage < ui8_temp) {
@@ -80,7 +80,7 @@ BitStatus checkUnderVoltageOverride(){
 	return 0;
 }
 
-BitStatus checkOverVoltageOverride(){
+BitStatus checkOverVoltageOverride(void){
 	//check for overvoltage --> ramp down regen starting 3.125% below max
 	ui8_temp = ui8_s_battery_voltage_max - (ui8_s_battery_voltage_max>>5);
 	if (ui8_BatteryVoltage > ui8_temp) {
