@@ -77,11 +77,8 @@ You will need an ebike with a Kunteng controller, there are two types available.
 
 1. Read the config.h and adjust as appropriate.
 
-2. Select the relevant make file for your operating system.
-    
-    ```mv Makefile_linux Makefile```
 
-3. Compile
+2. Compile
 
    ```make unlock```    # This step will remove the existing software from the stm8 chip, after this it is not possible to restore the original software.
 
@@ -91,7 +88,7 @@ You will need an ebike with a Kunteng controller, there are two types available.
 
    ```make flash```     # You will need a stm8 flash usb key for this step.
 
-4. Login and view if the software is running. You will need a serial adapter for this step. Use ctrl+a then x , then menu to to exit.
+3. Login and view if the software is running. You will need a serial adapter for this step. Use ctrl+a then x , then menu to to exit.
 
    ```minicom -D /dev/ttyUSB0 -s 9600```
 
