@@ -621,7 +621,7 @@ uint8_t readUart() {
 	return readRtu();
 }
 
-void display_update() {
+void display_update(void) {
 
 	if (readUart()) {
 

@@ -17,6 +17,14 @@
 #define MOTOR_STATE_RUNNING_NO_INTERPOLATION 1
 #define MOTOR_STATE_RUNNING_INTERPOLATION_60 2
 #define MOTOR_STATE_RUNNING_INTERPOLATION_360 3
+// typedef enum {
+//     MOTOR_STATE_COAST = 0,
+//     MOTOR_STATE_RUNNING_NO_INTERPOLATION,
+//     MOTOR_STATE_RUNNING_INTERPOLATION_60,
+//     MOTOR_STATE_RUNNING_INTERPOLATION_360
+// } motor_state_t;
+
+//motor_state_t ui8_possible_motor_state;
 
 extern uint8_t ui8_sinetable_position;
 extern uint16_t ui16_speed_inverse;

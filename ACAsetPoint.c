@@ -23,12 +23,6 @@
 #include "ACAsetPoint.h"
 #include "ACAcontrollerState.h"
 #include "ACAcommons.h"
-// FIXME ugly cross references
-// why? cause this blackbox is just for calculating,
-// it's not supposed to read values on its own
-// all values should be read by a slowloop_"readall/updatesensors, whatever" before calling it
-#include "brake.h"
-#include "adc.h" // FIXME ugly cross reference
 
 static uint32_t ui32_dutycycle; // local version of setpoint
 
@@ -97,7 +91,13 @@ void aca_setpoint_init(void) {
 	ui32_time_ticks_between_pas_interrupt_accumulated = ((uint32_t)ui16_s_ramp_start)<<3;
 }
 
-uint16_t aca_setpoint(uint16_t ui16_time_ticks_between_pas_interrupt, uint16_t setpoint_old) {
+uint16_t aca_setpoint(
+	uint16_t ui16_time_ticks_between_pas_interrupt, 
+	uint16_t setpoint_old, 
+	BitStatus bs_break_is_set,
+	uint16_t ui16_adc_read_motor_total_current,
+	uint8_t ui8_adc_read_battery_voltage
+	) {
 	// select virtual erps speed based on speedsensor type
 	if (((ui16_aca_flags & EXTERNAL_SPEED_SENSOR) == EXTERNAL_SPEED_SENSOR)) {
 		ui16_virtual_erps_speed = (uint16_t) ((((uint32_t)ui8_gear_ratio) * ui32_speed_sensor_rpks) /1000); 
@@ -137,11 +137,11 @@ uint16_t aca_setpoint(uint16_t ui16_time_ticks_between_pas_interrupt, uint16_t s
 	}
 
 	ui16_BatteryCurrent_accumulated -= ui16_BatteryCurrent_accumulated >> 3;
-	ui16_BatteryCurrent_accumulated += ui16_adc_read_motor_total_current();
+	ui16_BatteryCurrent_accumulated += ui16_adc_read_motor_total_current;
 	ui16_BatteryCurrent = ui16_BatteryCurrent_accumulated >> 3;
 
 	ui16_BatteryVoltage_accumulated -= ui16_BatteryVoltage_accumulated >> 3;
-	ui16_BatteryVoltage_accumulated += ui8_adc_read_battery_voltage();
+	ui16_BatteryVoltage_accumulated += ui8_adc_read_battery_voltage;
 	ui8_BatteryVoltage = ui16_BatteryVoltage_accumulated >> 3;
 
 	ui32_erps_accumulated -= ui32_erps_accumulated >> 3;
@@ -159,7 +159,7 @@ uint16_t aca_setpoint(uint16_t ui16_time_ticks_between_pas_interrupt, uint16_t s
 	ui16_time_ticks_between_pas_interrupt_smoothed = ui32_time_ticks_between_pas_interrupt_accumulated >> 3;
 	
 	// check for brake --> set regen current
-	if (brake_is_set()) {
+	if (bs_break_is_set) {
 		
 		controll_state_temp = 255;
 		//Current target based on regen assist level

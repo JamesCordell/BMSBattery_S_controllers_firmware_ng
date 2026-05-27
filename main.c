@@ -40,6 +40,7 @@
 uint16_t ui16_log1 = 0;
 uint8_t ui8_slowloop_flag = 0;
 uint8_t ui8_veryslowloop_counter = 0;
+
 uint8_t ui8_ultraslowloop_counter = 0;
 uint16_t ui16_log2 = 0;
 uint8_t ui8_log = 0;
@@ -51,7 +52,8 @@ uint8_t a = 0; //loop counter
 
 static int16_t i16_deziAmps;
 
-
+void display_update(void);
+void display_init(void);
 /////////////////////////////////////////////////////////////////////////////////////////////
 //// Functions prototypes
 
@@ -111,9 +113,10 @@ int main(void) {
 	PAS_init();
 	SPEED_init();
 	aca_setpoint_init();
-#if (defined (DISPLAY_TYPE) && defined (DISPLAY_TYPE_KINGMETER)) || defined DISPLAY_TYPE_KT_LCD3 || defined BLUOSEC
+
+	#if (defined (DISPLAY_TYPE) && defined (DISPLAY_TYPE_KINGMETER)) || defined DISPLAY_TYPE_KT_LCD3 || defined BLUOSEC
 	display_init();
-#endif
+	#endif
 
 	//  ITC_SetSoftwarePriority (ITC_IRQ_TIM1_OVF, ITC_PRIORITYLEVEL_2);
 
@@ -132,27 +135,23 @@ int main(void) {
 #endif
 
 	hall_sensors_read_and_action(); // needed to start the motor
-	//printf("Back in Main.c\n");
 
-	for (a = 0; a < NUMBER_OF_PAS_MAGS; a++) {// array init
-		ui16_torque[a] = 0;
-	}
-#ifdef DIAGNOSTICS
-	printf("System initialized\r\n");
-#endif
+	#ifdef DIAGNOSTICS
+		printf("System initialized\r\n");
+	#endif
 	while (1) {
 
 		uart_send_if_avail();
 
 		updateSpeeds();
-		updatePasStatus();
 
-#if (defined (DISPLAY_TYPE) && defined (DISPLAY_TYPE_KINGMETER)) || defined DISPLAY_TYPE_KT_LCD3 || defined BLUOSEC
-		display_update();
-#endif
+		updatePasStatus();
 
 		// scheduled update of setpoint and duty cycle (slow loop, 50 Hz)
 		if (ui8_slowloop_flag) {
+			#if (defined (DISPLAY_TYPE) && defined (DISPLAY_TYPE_KINGMETER)) || defined DISPLAY_TYPE_KT_LCD3 || defined BLUOSEC
+			display_update();
+			#endif
 			//printf("MainSlowLoop\n");
 		    debug_pin_set();
 			ui8_slowloop_flag = 0; //reset flag for slow loop
@@ -163,7 +162,13 @@ int main(void) {
 			updateSlowLoopStates();
 			updateX4();
 			updateLight();
-			ui16_setpoint = (uint16_t) aca_setpoint(ui16_time_ticks_between_pas_interrupt, ui16_setpoint); //update setpoint
+			ui16_setpoint = (uint16_t) aca_setpoint(
+				ui16_time_ticks_between_pas_interrupt, 
+				ui16_setpoint, 
+				brake_is_set(), 
+				ui16_adc_read_motor_total_current(),
+				ui8_adc_read_battery_voltage()
+			); //update setpoint
 
 			//#define DO_CRUISE_CONTROL 1
 #if DO_CRUISE_CONTROL == 1
@@ -173,10 +178,6 @@ int main(void) {
 			pwm_set_duty_cycle((uint8_t) ui16_setpoint);
 
 			//pwm_set_duty_cycle ((uint8_t)ui16_sum_throttle);
-
-
-			
-			
 			/****************************************************************************/
 			//very slow loop for communication
 			if (ui8_veryslowloop_counter > 5) {
@@ -184,16 +185,28 @@ int main(void) {
 				ui8_ultraslowloop_counter++;
 				ui8_veryslowloop_counter = 0;
 
-				if (ui8_ultraslowloop_counter > 10) {
+				if (ui8_ultraslowloop_counter > 20) {
 					ui8_ultraslowloop_counter = 0;
 					ui8_uptime++;
 				}
 
 #ifdef DIAGNOSTICS
 				//uint32_torquesensorCalibration=80;
-				printf("%u,%u, %u, %u, %u, %u\r\n", ui16_control_state, (uint16_t) uint32_current_target, PAS_is_active, ui16_BatteryCurrent, ui16_sum_torque, (uint16_t)uint32_torquesensorCalibration);
+				printf("sp:%u cs:%u, ct:%u, pas:%u, bc:%u, bv:%u st:%u, tq:cal%u, mserps:%u, th:%u pBc:%u br:\r\n",
+					ui16_setpoint,
+					ui16_control_state, 
+					(uint16_t) uint32_current_target, 
+					PAS_is_active, 
+					ui16_BatteryCurrent,
+					ui16_adc_read_battery_voltage(),
+					ui16_sum_torque, 
+					(uint16_t)uint32_torquesensorCalibration,
+					ui16_motor_speed_erps,
+					ui8_adc_read_throttle(),
+					ui8_adc_read_phase_B_current()
+				);
 
-				//printf("erps %d, motorstate %d, cyclecountertotal %d\r\n", ui16_motor_speed_erps, ui8_possible_motor_state|ui8_dynamic_motor_state, ui16_PWM_cycles_counter_total);
+				// printf("erps %d, motorstate %d, cyclecountertotal %d", ui16_motor_speed_erps, ui8_possible_motor_state|ui8_dynamic_motor_state, ui16_PWM_cycles_counter_total);
 
 				//printf("cheatstate, %d, km/h %lu, Voltage, %d, setpoint %d, erps %d, current %d, correction_value, %d\n", ui8_offroad_state, ui32_speed_sensor_rpks, ui8_BatteryVoltage, ui16_setpoint, ui16_motor_speed_erps, ui16_BatteryCurrent, ui8_position_correction_value);
 
@@ -205,11 +218,12 @@ int main(void) {
 				putchar(ui16_ADC_iq_current>>2);
 				putchar(ui8_position_correction_value);
 				putchar(255);*/
-				// printf("%d, %d, %d, %d, %d, %d\r\n", (uint16_t) uint8_t_hall_case[0], (uint16_t)uint8_t_hall_case[1],(uint16_t) uint8_t_hall_case[2],(uint16_t) uint8_t_hall_case[3], (uint16_t)uint8_t_hall_case[4], (uint16_t)uint8_t_hall_case[5]);
-				//printf("%d, %d, %d, %d, %d, %d, %d,\r\n", ui8_position_correction_value, ui16_BatteryCurrent, ui16_setpoint, ui8_regen_throttle, ui16_motor_speed_erps, ui16_ADC_iq_current>>2,ui16_adc_read_battery_voltage());
+				//printf("hall:%d, %d, %d, %d, %d, %d\r\n", (uint16_t) uint8_t_hall_case[0], (uint16_t)uint8_t_hall_case[1],(uint16_t) uint8_t_hall_case[2],(uint16_t) uint8_t_hall_case[3], (uint16_t)uint8_t_hall_case[4], (uint16_t)uint8_t_hall_case[5]);
+					//printf("%d, %d, %d, %d, %d, %d, %d,\r\n", ui8_position_correction_value, ui16_BatteryCurrent, ui16_setpoint, ui8_regen_throttle, ui16_motor_speed_erps, ui16_ADC_iq_current>>2,ui16_adc_read_battery_voltage());
 
 
 				//printf("correction angle %d, Current %d, Voltage %d, sumtorque %d, setpoint %d, km/h %lu\n",ui8_position_correction_value, i16_deziAmps, ui8_BatteryVoltage, ui16_sum_throttle, ui16_setpoint, ui32_speed_sensor_rpks);
+
 #endif
 			}//end of very slow loop
 

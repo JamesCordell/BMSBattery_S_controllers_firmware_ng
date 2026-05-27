@@ -7,9 +7,13 @@
 .PHONY: all clean
 
 ifndef STM8BINUTILS
+
     $(error The environment variable 'STM8BINUTILS' is not defined. Please set it before running make)
 endif
 
+ifndef STM8FLASH
+    $(error The environment variable 'STM8FLASH' is not defined. Please set it before running make)
+endif
 #Compiler
 CC = sdcc
 OBJCOPY=$(STM8BINUTILS)/objcopy
@@ -94,10 +98,10 @@ hex:
 	$(OBJCOPY) -O ihex $(ELF_SECTIONS_TO_REMOVE) $(PNAME).elf $(PNAME).ihx
 
 flash:
-	stm8flash -cstlinkv2 -pstm8s105?6 -w$(PNAME).bin
+	$(STM8FLASH)stm8flash -cstlinkv2 -pstm8s105?6 -w$(PNAME).bin
 
 unlock:
-	stm8flash -cstlinkv2 -pstm8s105?6 -u
+	$(STM8FLASH)stm8flash -cstlinkv2 -pstm8s105?6 -u
 
 clean:
 	@echo "Cleaning files..."

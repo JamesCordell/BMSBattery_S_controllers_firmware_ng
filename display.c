@@ -55,11 +55,11 @@ uint8_t ui8_UARTCounter = 0;
 
 volatile struc_lcd_configuration_variables lcd_configuration_variables;
 
-void display_init(){
+void display_init(void){
 	// noop just here to have a common interface
 }
 
-void send_message() {
+void send_message(void) {
 
 	// prepare moving indication info
 	ui8_moving_indication = 0;
@@ -177,7 +177,7 @@ void digestLcdValues(void) {
 
 // see if we have a received package to be processed
 
-void display_update() {
+void display_update(void) {
 
 	// fill local buffer from uart ringbuffer
 	uart_fill_rx_packet_buffer(ui8_rx_buffer, 13, &ui8_UARTCounter);

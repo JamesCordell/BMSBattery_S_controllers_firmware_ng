@@ -21,7 +21,14 @@
 
 #include "config.h"
 
-uint16_t aca_setpoint (uint16_t ui16_time_ticks_between_pas_interrupt, uint16_t setpoint_old );
+uint16_t aca_setpoint (
+    uint16_t ui16_time_ticks_between_pas_interrupt,
+    uint16_t setpoint_old,
+    BitStatus bs_break_is_set,
+	uint16_t ui16_adc_read_motor_total_current,
+	uint8_t ui8_adc_read_battery_voltage
+);
+
 void aca_setpoint_init(void);
 
 #endif /* ACASETPOINT_H */

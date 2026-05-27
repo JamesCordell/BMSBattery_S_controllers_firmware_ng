@@ -29,9 +29,6 @@
 uint8_t ui8_throttle_min_range = 32;
 uint8_t ui8_throttle_max_range = 192;
 
-
-
-
 uint8_t ui8_speedlimit_kph = 25; // normal limit
 uint8_t ui8_speedlimit_without_pas_kph = 6; // limit without pas activity
 uint8_t ui8_speedlimit_with_throttle_override_kph = 35; // limit with pas and throttle both active
@@ -130,7 +127,7 @@ uint8_t ui8_lockstatus = 255;
 uint16_t ui16_aca_flags = 0;
 uint16_t ui16_aca_experimental_flags = 0;
 
-uint16_t ui16_torque[NUMBER_OF_PAS_MAGS]; //array for torque values of one crank revolution
+uint16_t ui16_torque[NUMBER_OF_PAS_MAGS] = {0}; //array for torque values of one crank revolution
 uint8_t ui8_torque_index = 0; //counter for torque array
 
 uint16_t ui16_time_ticks_between_pas_interrupt_smoothed = 0;
@@ -283,7 +280,7 @@ void controllerstate_init(void) {
 	eepromVal = eeprom_read(OFFSET_BATTERY_VOLTAGE_MAX);
 	if (eepromVal > 0) ui8_s_battery_voltage_max = eepromVal;
 	
-	ui8_battery_voltage_nominal = (((uint16_t)(ui8_s_battery_voltage_max-(ui8_s_battery_voltage_max-ui8_s_battery_voltage_min)/2))*ui8_s_battery_voltage_calibration)/256L;
+	ui8_battery_voltage_nominal = (((uint16_t)(ui8_s_battery_voltage_max - (ui8_s_battery_voltage_max - ui8_s_battery_voltage_min) / 2)) * ui8_s_battery_voltage_calibration) / 256L;
 	
 	eepromVal = eeprom_read(OFFSET_MOTOR_CONSTANT);
 	if (eepromVal > 0) flt_s_motor_constant = int2float(eepromVal, 4.0);

@@ -15,7 +15,7 @@
 #define limit_with_throttle_override 80
 #define limit_without_pas 80                    // The speed limit without pedal asssit.
 #define timeout 3125U
-#define wheel_circumference 2040L               // The distance in mm the wheel covers in one revolution. 
+#define wheel_circumference 1040L               // The distance in mm the wheel covers in one revolution.
 
 #define ADC_THROTTLE_MIN_VALUE 46               // The Miinimum throttle value
 #define ADC_THROTTLE_MAX_VALUE 180              // The Maximum throttle value
@@ -31,7 +31,7 @@
 #define MOTOR_ROTOR_DELTA_PHASE_ANGLE_RIGHT 0
 
 /* How much each PAS level should assist. From 0 to 100 */
-#define LEVEL_1 30                              
+#define LEVEL_1 30
 #define LEVEL_2 45
 #define LEVEL_3 60
 #define LEVEL_4 80
@@ -52,7 +52,7 @@
 #define CORRECTION_AT_ANGLE 127
 
 /* Set one type of display type. */
-//#define DISPLAY_TYPE_KT_LCD3
+#define DISPLAY_TYPE_KT_LCD3
 //#define BLUOSEC                               // Bluetooth on the serial port and phone app.
 
 /* enable these lines to set this display type.
@@ -60,7 +60,7 @@
 #define DISPLAY_TYPE_KINGMETER (DISPLAY_TYPE_KINGMETER_618U|DISPLAY_TYPE_KINGMETER_901U)
 #define DISPLAY_TYPE DISPLAY_TYPE_KINGMETER     // Set your display type here. CHANGES ONLY HERE!
 */
-#define DIAGNOSTICS                             // Serial 9600 8N1 
+//#define DIAGNOSTICS                             // Serial 9600 8N1 
 
 #define ANGLE_4_0 1
 #define ANGLE_6_60 43
@@ -91,7 +91,7 @@
 
 #define EEPROM_INIT_MAGIC_BYTE 240              // makes sure (chance of fail 1/255) eeprom is invalidated after flashing new config
 #define ADC_BATTERY_VOLTAGE_K 80
-#define ACA_EXPERIMENTAL 128 + 8
+#define ACA_EXPERIMENTAL 128
 
 // cbDcNull + 1 
 // AntiJitter + 2
