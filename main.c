@@ -105,6 +105,7 @@ int main(void) {
 	timer2_init();
 	uart_init();
 	eeprom_init();
+
 	controllerstate_init();
 	initErpsRatio();
 	pwm_init();
@@ -158,7 +159,7 @@ int main(void) {
 			ui8_veryslowloop_counter++; // increase counter for very slow loop
 
 			checkPasInActivity();
-			updateRequestedTorque(); //now calculates tq for sensor as well
+			updateRequestedTorque();
 			updateSlowLoopStates();
 			updateX4();
 			updateLight();
@@ -170,10 +171,9 @@ int main(void) {
 				ui8_adc_read_battery_voltage()
 			); //update setpoint
 
-			//#define DO_CRUISE_CONTROL 1
-#if DO_CRUISE_CONTROL == 1
+			#if DO_CRUISE_CONTROL == 1
 			ui16_setpoint = cruise_control(ui16_setpoint);
-#endif
+			#endif
 
 			pwm_set_duty_cycle((uint8_t) ui16_setpoint);
 
@@ -190,7 +190,7 @@ int main(void) {
 					ui8_uptime++;
 				}
 
-#ifdef DIAGNOSTICS
+				#ifdef DIAGNOSTICS
 				//uint32_torquesensorCalibration=80;
 				printf("sp:%u cs:%u, ct:%u, pas:%u, bc:%u, bv:%u st:%u, tq:cal%u, mserps:%u, th:%u pBc:%u br:\r\n",
 					ui16_setpoint,
@@ -198,7 +198,7 @@ int main(void) {
 					(uint16_t) uint32_current_target, 
 					PAS_is_active, 
 					ui16_BatteryCurrent,
-					ui16_adc_read_battery_voltage(),
+					ui8_adc_read_battery_voltage(),
 					ui16_sum_torque, 
 					(uint16_t)uint32_torquesensorCalibration,
 					ui16_motor_speed_erps,
@@ -224,7 +224,7 @@ int main(void) {
 
 				//printf("correction angle %d, Current %d, Voltage %d, sumtorque %d, setpoint %d, km/h %lu\n",ui8_position_correction_value, i16_deziAmps, ui8_BatteryVoltage, ui16_sum_throttle, ui16_setpoint, ui32_speed_sensor_rpks);
 
-#endif
+				#endif
 			}//end of very slow loop
 
 			debug_pin_reset();
