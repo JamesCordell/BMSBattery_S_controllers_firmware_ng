@@ -100,7 +100,7 @@ uint16_t aca_setpoint(
 	) {
 	// select virtual erps speed based on speedsensor type
 	if (((ui16_aca_flags & EXTERNAL_SPEED_SENSOR) == EXTERNAL_SPEED_SENSOR)) {
-		ui16_virtual_erps_speed = (uint16_t) ((((uint32_t)ui8_gear_ratio) * ui32_speed_sensor_rpks) /1000); 
+		ui16_virtual_erps_speed = (uint16_t) ((((uint32_t)ui8_gear_ratio) * ui32_speed_sensor_rpks) / 1000);
 	}else{
 		ui16_virtual_erps_speed = (uint16_t) ui32_erps_filtered;
 	}
@@ -233,24 +233,20 @@ uint16_t aca_setpoint(
 			}
 		} else { // torque sensor mode
 
+			//erst mal alles aufmultiplizieren, damit beim Teilen was über 1 übrig bleibt. Bitte mal überschlagen, ob die int32 da nicht überlaufen kann...
+			uint32_temp = ui16_sum_torque;
+			uint32_temp *= ui8_assist_percent_actual;
+			uint32_temp *= ui16_battery_current_max_value;
+			uint32_temp *= uint32_torquesensorCalibration;
 
-		             //erst mal alles aufmultiplizieren, damit beim Teilen was über 1 übrig bleibt. Bitte mal überschlagen, ob die int32 da nicht überlaufen kann...
-		             uint32_temp = ui16_sum_torque;
-		             uint32_temp *= ui8_assist_percent_actual;
-		             uint32_temp *= ui16_battery_current_max_value;
-		             uint32_temp *= uint32_torquesensorCalibration;
+			uint32_temp /= ui16_time_ticks_between_pas_interrupt_smoothed; // hier lässt sich die geteilt-Operation nicht vermeiden :-(
 
-		             uint32_temp /= ui16_time_ticks_between_pas_interrupt_smoothed; // hier lässt sich die geteilt-Operation nicht vermeiden :-(
-
-		             if(PAS_is_active)
-		             uint32_current_target = (uint32_temp >>8) +  (uint32_t) ui16_current_cal_b; //right shift 15 fasst die Operationen /100 (annähernd >>7) aus der assist_percent und /255 ( >>8) aus dem battery_current max zusammen, ist nicht ganz korrekt, ggf. nur >>14 nehmen -->/(256*128) vs. /(256*64)
-		             else uint32_current_target =(uint32_t) ui16_current_cal_b;
-
+			if(PAS_is_active)
+			uint32_current_target = (uint32_temp >>8) +  (uint32_t) ui16_current_cal_b; //right shift 15 fasst die Operationen /100 (annähernd >>7) aus der assist_percent und /255 ( >>8) aus dem battery_current max zusammen, ist nicht ganz korrekt, ggf. nur >>14 nehmen -->/(256*128) vs. /(256*64)
+			else uint32_current_target =(uint32_t) ui16_current_cal_b;
 
 			controll_state_temp += 4;
-
 		}
-
 
 		float_temp = 0.0;
 		// throttle / torquesensor override following

@@ -1,0 +1,13 @@
+{
+    "[c]": {
+        "editor.defaultFormatter": "gchng.uncrustify",
+        "editor.formatOnSave": true
+    },
+    "[cpp]": {
+        "editor.defaultFormatter": "gchng.uncrustify",
+        "editor.formatOnSave": true
+    },
+    "uncrustify.configPath.windows": "C:/path/to/your/uncrustify.cfg", 
+    "uncrustify.configPath.linux": "${workspaceRoot}/uncrustify.cfg",
+    "uncrustify.configPath.osx": "${workspaceRoot}/uncrustify.cfg"
+}

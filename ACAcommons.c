@@ -185,7 +185,7 @@ void updateLight(void) {
 		light_stat = (light_stat&~1) | 1;
 	}else if (((light_stat &1) == 1)&& ((light_stat &128)!= 128)) {
 		light_pin_reset();
-		light_stat = (light_stat&~1) | 0;
+		light_stat = (light_stat&~1);
 	}
 }
 
