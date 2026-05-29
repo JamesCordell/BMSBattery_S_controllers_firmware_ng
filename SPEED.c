@@ -21,19 +21,19 @@
 // SPEED signal
 void EXTI_PORTC_IRQHandler(void) __interrupt(EXTI_PORTC_IRQHANDLER)
 {
-  ui8_SPEED_Flag = 1; //just setting flag in interrupt handler
+    ui8_SPEED_Flag = 1; //just setting flag in interrupt handler
 }
 
 void SPEED_init (void)
 {
-  //PAS pin as external input pin interrupt
-  GPIO_Init(SPEED__PORT,
-	    SPEED__PIN,
-	    GPIO_MODE_IN_PU_IT); // with Pullup and external interrupt
+    //PAS pin as external input pin interrupt
+    GPIO_Init(SPEED__PORT,
+              SPEED__PIN,
+              GPIO_MODE_IN_PU_IT); // with Pullup and external interrupt
 
-  //initialize the Interrupt sensitivity: falling edge only
-  EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOC,
-			    EXTI_SENSITIVITY_FALL_ONLY);
-  }
+    //initialize the Interrupt sensitivity: falling edge only
+    EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOC,
+                              EXTI_SENSITIVITY_FALL_ONLY);
+}
 
 

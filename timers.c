@@ -21,13 +21,13 @@
 
 void timer2_init (void)
 {
-  // TIM2 Peripheral Configuration
-  TIM2_DeInit();
+    // TIM2 Peripheral Configuration
+    TIM2_DeInit();
 
-  TIM2_TimeBaseInit(TIM2_PRESCALER_8, 25536); //timetic with 50HZ
-  TIM2_ITConfig(TIM2_IT_UPDATE,ENABLE);
+    TIM2_TimeBaseInit(TIM2_PRESCALER_8, 25536); //timetic with 50HZ
+    TIM2_ITConfig(TIM2_IT_UPDATE,ENABLE);
 
-  TIM2_Cmd(ENABLE); // TIM2 counter enable
+    TIM2_Cmd(ENABLE); // TIM2 counter enable
 
 }
 
@@ -37,10 +37,10 @@ void timer2_init (void)
 //interrupt routine for slow control loop timing
 void TIM2_UPD_OVF_TRG_BRK_IRQHandler(void) __interrupt(TIM2_UPD_OVF_TRG_BRK_IRQHANDLER)
 {
-  ui8_slowloop_flag=1;
-  //printf("SlowTimetic\n");
-  // clear the interrupt pending bit for TIM2
-  TIM2_ClearITPendingBit(TIM2_IT_UPDATE);
+    ui8_slowloop_flag = 1;
+    //printf("SlowTimetic\n");
+    // clear the interrupt pending bit for TIM2
+    TIM2_ClearITPendingBit(TIM2_IT_UPDATE);
 }
 
 

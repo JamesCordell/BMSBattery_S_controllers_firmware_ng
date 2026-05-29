@@ -18,28 +18,28 @@
 
 void adc_init(void) {
     uint8_t ui8_i;
-   
+
     //init GPIO for the used ADC pins
     GPIO_Init(GPIOB,
-            (THROTTLE__PIN || CURRENT_PHASE_B__PIN || CURRENT_MOTOR_TOTAL__PIN || REGEN_THROTTLE__PIN),
-            GPIO_MODE_IN_FL_NO_IT);
+              (THROTTLE__PIN || CURRENT_PHASE_B__PIN || CURRENT_MOTOR_TOTAL__PIN || REGEN_THROTTLE__PIN),
+              GPIO_MODE_IN_FL_NO_IT);
 
     GPIO_Init(GPIOE,
-            (CURRENT_MOTOR_TOTAL_FILTERED__PIN),
-            GPIO_MODE_IN_FL_NO_IT);
+              (CURRENT_MOTOR_TOTAL_FILTERED__PIN),
+              GPIO_MODE_IN_FL_NO_IT);
 
     //de-Init ADC peripheral
     ADC1_DeInit();
 
     //init ADC1 peripheral
     ADC1_Init(ADC1_CONVERSIONMODE_SINGLE,
-            ADC1_CHANNEL_9,
-            ADC1_PRESSEL_FCPU_D2,
-            ADC1_EXTTRIG_TIM,
-            DISABLE,
-            ADC1_ALIGN_LEFT,
-            (ADC1_SCHMITTTRIG_CHANNEL4 || ADC1_SCHMITTTRIG_CHANNEL5 || ADC1_SCHMITTTRIG_CHANNEL6 || ADC1_SCHMITTTRIG_CHANNEL7 || ADC1_SCHMITTTRIG_CHANNEL8),
-            DISABLE);
+              ADC1_CHANNEL_9,
+              ADC1_PRESSEL_FCPU_D2,
+              ADC1_EXTTRIG_TIM,
+              DISABLE,
+              ADC1_ALIGN_LEFT,
+              (ADC1_SCHMITTTRIG_CHANNEL4 || ADC1_SCHMITTTRIG_CHANNEL5 || ADC1_SCHMITTTRIG_CHANNEL6 || ADC1_SCHMITTTRIG_CHANNEL7 || ADC1_SCHMITTTRIG_CHANNEL8),
+              DISABLE);
 
     ADC1_ScanModeCmd(ENABLE);
     ADC1_Cmd(ENABLE);
@@ -60,11 +60,11 @@ void adc_init(void) {
     // is there a deeper meaning behind assigning the value 8 times above?
     // compiler optimization?
     // i don't dare to cleanup this code until I'm sure its just bad style :)
-    
+
     ui16_current_cal_b = 0;
     ui16_x4_cal_b = 0;
     ui16_throttle_cal_b = 0;
-    
+
     // read and average a few values of ADC
     for (ui8_i = 0; ui8_i < 16; ui8_i++) {
         delay_halfms(30);
@@ -74,15 +74,15 @@ void adc_init(void) {
         ui16_x4_cal_b += ui16_adc_read_x4_value();
         ui16_throttle_cal_b += ui8_adc_read_throttle();
     }
-    
+
     ui16_current_cal_b >>= 4;
     ui16_current_cal_b -= 1;
     ui16_x4_cal_b >>= 4;
     ui16_x4_cal_b -= 1;
     ui16_throttle_cal_b >>= 4;
     ui16_throttle_cal_b -= 1;
-    
-    
+
+
 #ifdef DIAGNOSTICS
     printf("ui16_current_cal_b = %d\r\n", ui16_current_cal_b);
 #endif
@@ -109,7 +109,7 @@ uint8_t ui8_adc_read_phase_B_current(void) {
 
 uint16_t ui16_adc_read_phase_B_current(void) {
     uint16_t temph;
-    uint8_t templ;
+    uint8_t  templ;
 
     templ = *(uint8_t*) (0x53EB);
     temph = *(uint8_t*) (0x53EA);
@@ -125,7 +125,7 @@ uint8_t ui8_adc_read_throttle(void) {
 
 uint16_t ui16_adc_read_x4_value(void) {
     uint16_t temph;
-    uint8_t templ;
+    uint8_t  templ;
 
     templ = *(uint8_t*) (0x53EF);
     temph = *(uint8_t*) (0x53EE);
@@ -141,7 +141,7 @@ uint8_t ui8_adc_read_motor_total_current(void) {
 
 uint16_t ui16_adc_read_motor_total_current(void) {
     uint16_t temph;
-    uint8_t templ;
+    uint8_t  templ;
 
     templ = *(uint8_t*) (0x53F1);
     temph = *(uint8_t*) (0x53F0);
@@ -156,7 +156,7 @@ uint8_t ui8_adc_read_battery_voltage(void) {
 
 uint16_t ui16_adc_read_battery_voltage(void) {
     uint16_t temph;
-    uint8_t templ;
+    uint8_t  templ;
 
     templ = *(uint8_t*) (0x53F3);
     temph = *(uint8_t*) (0x53F2);

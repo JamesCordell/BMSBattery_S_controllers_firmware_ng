@@ -59,13 +59,13 @@ void UART2_IRQHandler(void) __interrupt(UART2_IRQHANDLER) {
         if (ui16_time_ticks_for_uart_timeout > UART_PACKET_TIMEOUT_TICKS) {
             ui8_rx_packet_start_pos = ui8_rx_fillpointer;
         }
-        ui16_time_ticks_for_uart_timeout=0;
-        
+        ui16_time_ticks_for_uart_timeout = 0;
+
         ui8_uarx_buffer[ui8_rx_fillpointer++] = UART2_ReceiveData8();
         if (ui8_rx_fillpointer >= UART_RINGBUFFER_SIZE) {
             ui8_rx_fillpointer = 0;
         }
-        
+
     } else {
 
         // catch errors and process them in a reasonable manner which is always to ignore them :)
@@ -112,11 +112,11 @@ void uart_fill_rx_packet_buffer(uint8_t *buffer, uint8_t bufferSize, uint8_t *bu
 void uart_init(void) {
     UART2_DeInit();
     UART2_Init((uint32_t) 9600,
-            UART2_WORDLENGTH_8D,
-            UART2_STOPBITS_1,
-            UART2_PARITY_NO,
-            UART2_SYNCMODE_CLOCK_DISABLE,
-            UART2_MODE_TXRX_ENABLE);
+               UART2_WORDLENGTH_8D,
+               UART2_STOPBITS_1,
+               UART2_PARITY_NO,
+               UART2_SYNCMODE_CLOCK_DISABLE,
+               UART2_MODE_TXRX_ENABLE);
     UART2_ITConfig(UART2_IT_RXNE_OR, ENABLE);
 }
 

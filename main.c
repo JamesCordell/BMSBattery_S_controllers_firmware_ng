@@ -125,15 +125,15 @@ int main(void) {
 
     watchdog_init();     //init watchdog after enabling interrupt to have fast loop running already
 
-	#if (SVM_TABLE == SVM)
+    #if (SVM_TABLE == SVM)
     TIM1_SetCompare1(126 << 1);
     TIM1_SetCompare2(126 << 1);
     TIM1_SetCompare3(126 << 1);
-	#elif (SVM_TABLE == SINE) || (SVM_TABLE == SINE_SVM)
+    #elif (SVM_TABLE == SINE) || (SVM_TABLE == SINE_SVM)
     TIM1_SetCompare1(126 << 2);
     TIM1_SetCompare2(126 << 2);
     TIM1_SetCompare3(126 << 2);
-	#endif
+    #endif
 
     hall_sensors_read_and_action();     // needed to start the motor
 

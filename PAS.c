@@ -38,14 +38,14 @@ void EXTI_PORTD_IRQHandler(void) __interrupt(EXTI_PORTD_IRQHANDLER)
 
 void PAS_init (void)
 {
-  //PAS pin as external input pin interrupt
-  GPIO_Init(PAS__PORT,
-	    PAS__PIN,
-	    GPIO_MODE_IN_PU_IT); // with Pullup and external interrupt
+    //PAS pin as external input pin interrupt
+    GPIO_Init(PAS__PORT,
+              PAS__PIN,
+              GPIO_MODE_IN_PU_IT); // with Pullup and external interrupt
 
-  //initialize the Interrupt sensitivity: falling edge only
-  EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD,
-			    EXTI_SENSITIVITY_FALL_ONLY);
+    //initialize the Interrupt sensitivity: falling edge only
+    EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD,
+                              EXTI_SENSITIVITY_FALL_ONLY);
 }
 
 
