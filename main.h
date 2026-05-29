@@ -13,7 +13,7 @@
 #define SVM_TABLE_LEN_x1024 262144 //(256 * 1024)
 
 
-#define SETPOINT_MAX_VALUE 255		//maximum value for setpoint, taken from map function
+#define SETPOINT_MAX_VALUE 255          //maximum value for setpoint, taken from map function
 #define ADC_MOTOR_TOTAL_CURRENT_ZERO_AMPS 81 // 1.59V; 325 (10bits) = 81 (8bits)
 #define ADC_MOTOR_TOTAL_CURRENT_MAX 20 // 20 (8bits) ~ 2 Amps
 #define ADC_MOTOR_TOTAL_CURRENT_MAX_POSITIVE 90 // +2A
@@ -36,8 +36,8 @@
 
 extern uint16_t ui16_log1;
 extern uint16_t ui16_log2;
-extern uint8_t ui8_log;
-extern uint8_t ui8_slowloop_flag;	//Flag for slow loop timing
+extern uint8_t  ui8_log;
+extern uint8_t  ui8_slowloop_flag;      //Flag for slow loop timing
 
 
 uint8_t update_advance_angle(void);

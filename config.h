@@ -57,11 +57,11 @@
 //#define BLUOSEC                               // Bluetooth on the serial port and phone app.
 
 /* enable these lines to set this display type.
-#define DISPLAY_TYPE_KINGMETER_618U (1<<4)      // King-Meter 618U protocol (KM5s, EBS-LCD2, J-LCD, SW-LCD)
-#define DISPLAY_TYPE_KINGMETER (DISPLAY_TYPE_KINGMETER_618U|DISPLAY_TYPE_KINGMETER_901U)
-#define DISPLAY_TYPE DISPLAY_TYPE_KINGMETER     // Set your display type here. CHANGES ONLY HERE!
-*/
-#define DIAGNOSTICS                             // Serial 9600 8N1 
+ #define DISPLAY_TYPE_KINGMETER_618U (1<<4)      // King-Meter 618U protocol (KM5s, EBS-LCD2, J-LCD, SW-LCD)
+ #define DISPLAY_TYPE_KINGMETER (DISPLAY_TYPE_KINGMETER_618U|DISPLAY_TYPE_KINGMETER_901U)
+ #define DISPLAY_TYPE DISPLAY_TYPE_KINGMETER     // Set your display type here. CHANGES ONLY HERE!
+ */
+#define DIAGNOSTICS                             // Serial 9600 8N1
 
 #define ANGLE_4_0 1
 #define ANGLE_6_60 43

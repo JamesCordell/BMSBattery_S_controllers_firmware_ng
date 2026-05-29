@@ -26,7 +26,7 @@
 
 //motor_state_t ui8_possible_motor_state;
 
-extern uint8_t ui8_sinetable_position;
+extern uint8_t  ui8_sinetable_position;
 extern uint16_t ui16_speed_inverse;
 extern uint16_t ui16_PWM_cycles_counter_total;
 extern uint16_t ui16_iq_current_ma;

@@ -8,7 +8,7 @@
  * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
 
-/* 
+/*
  * File:   ACAsetPoint.h
  * Author: Björn Schmidt
  *
@@ -22,12 +22,12 @@
 #include "config.h"
 
 uint16_t aca_setpoint (
-    uint16_t ui16_time_ticks_between_pas_interrupt,
-    uint16_t setpoint_old,
+    uint16_t  ui16_time_ticks_between_pas_interrupt,
+    uint16_t  setpoint_old,
     BitStatus bs_break_is_set,
-	uint16_t ui16_adc_read_motor_total_current,
-	uint8_t ui8_adc_read_battery_voltage
-);
+    uint16_t  ui16_adc_read_motor_total_current,
+    uint8_t   ui8_adc_read_battery_voltage
+    );
 
 void aca_setpoint_init(void);
 
