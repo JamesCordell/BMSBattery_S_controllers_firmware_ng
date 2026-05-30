@@ -96,7 +96,7 @@ uint8_t  ui8_correction_at_angle = 127;
 uint16_t ui16_ADC_iq_current = 0;
 uint16_t ui16_ADC_iq_current_filtered = 0;
 uint16_t ui16_control_state = 0;
-uint8_t  ui8_uptime = 0;
+uint8_t  ui8_uptime_seconds = 0;
 
 uint8_t  ui8_variableDebugA = 0;
 uint8_t  ui8_variableDebugB = 0;

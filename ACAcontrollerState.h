@@ -70,7 +70,7 @@ extern uint8_t  ui8_speedlimit_kph;
 extern uint8_t  ui8_speedlimit_without_pas_kph;
 extern uint8_t  ui8_speedlimit_actual_kph;
 extern uint8_t  ui8_speedlimit_with_throttle_override_kph;
-extern uint8_t  ui8_uptime;
+extern uint8_t  ui8_uptime_seconds;
 extern uint8_t  ui8_walk_assist;
 
 extern uint8_t  ui8_variableDebugA;

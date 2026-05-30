@@ -237,7 +237,7 @@ void addBasicStateInfos(void) {
     addPayload(CODE_SETPOINT, ui16_setpoint);
     addPayload(CODE_SETPOINT_STATE_HIGH_BYTE, ui16_control_state >> 8);
     addPayload(CODE_SETPOINT_STATE, ui16_control_state);
-    addPayload(CODE_UPTIME, ui8_uptime);
+    addPayload(CODE_UPTIME, ui8_uptime_seconds);
     addPayload(CODE_X4VALUE_HIGH_BYTE, ui16_x4_value >> 8);
     addPayload(CODE_X4VALUE, ui16_x4_value);
     addPayload(CODE_VER_SPEED_HIGH_BYTE, ui16_virtual_erps_speed >> 8);

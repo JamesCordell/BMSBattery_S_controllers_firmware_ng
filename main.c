@@ -150,13 +150,12 @@ int main(void) {
 
         // scheduled update of setpoint and duty cycle (slow loop, 50 Hz)
         if (ui8_slowloop_flag) {
+            ui8_slowloop_flag = 0;  //reset flag for slow loop
             #if (defined (DISPLAY_TYPE) && defined (DISPLAY_TYPE_KINGMETER)) || defined DISPLAY_TYPE_KT_LCD3 || defined BLUOSEC
             display_update();
             #endif
             //printf("MainSlowLoop\n");
             debug_pin_set();
-            ui8_slowloop_flag = 0;             //reset flag for slow loop
-            ui8_veryslowloop_counter++;             // increase counter for very slow loop
 
             checkPasInActivity();
             updateRequestedTorque();
@@ -179,15 +178,15 @@ int main(void) {
 
             //pwm_set_duty_cycle ((uint8_t)ui16_sum_throttle);
             /****************************************************************************/
-            //very slow loop for communication
-            if (ui8_veryslowloop_counter > 5) {
-
-                ui8_ultraslowloop_counter++;
+            //very slow loop for uart out
+            ui8_veryslowloop_counter++;             // increase counter for very slow loop
+            if (ui8_veryslowloop_counter > 5) { // 10 Hz
                 ui8_veryslowloop_counter = 0;
 
-                if (ui8_ultraslowloop_counter > 20) {
+                ui8_ultraslowloop_counter++;
+                if (ui8_ultraslowloop_counter > 10) { // 1 Hz
                     ui8_ultraslowloop_counter = 0;
-                    ui8_uptime++;
+                    ui8_uptime_seconds++;
                 }
 
                 #ifdef DIAGNOSTICS
