@@ -99,11 +99,11 @@ uint16_t aca_setpoint(
     uint8_t   ui8_adc_read_battery_voltage
     ) {
     // select virtual erps speed based on speedsensor type
-    if (((ui16_aca_flags & EXTERNAL_SPEED_SENSOR) == EXTERNAL_SPEED_SENSOR)) {
-        ui16_virtual_erps_speed = (uint16_t) ((((uint32_t)ui8_gear_ratio) * ui32_speed_sensor_rpks) / 1000);
-    }else{
-        ui16_virtual_erps_speed = (uint16_t) ui32_erps_filtered;
-    }
+    //if (((ui16_aca_flags & EXTERNAL_SPEED_SENSOR) == EXTERNAL_SPEED_SENSOR)) {
+        ui16_virtual_erps_speed = (uint16_t) ((((uint32_t)ui8_gear_ratio) * ui32_wheel_revolutions_per_second_x_resolution_factor) / 1000);
+    //}else{
+    //    ui16_virtual_erps_speed = (uint16_t) ui32_erps_filtered;
+    //}
 
     // first select current speed limit
     if (ui8_offroad_state == 255) {

@@ -18,15 +18,15 @@
 #include "ACAcontrollerState.h"
 
 
-// SPEED signal
+// Wheel revolution interrupt signal
 void EXTI_PORTC_IRQHandler(void) __interrupt(EXTI_PORTC_IRQHANDLER)
 {
-    ui8_SPEED_Flag = 1; //just setting flag in interrupt handler
+    ui8_wheel_rotation_sensor_flag = 1; //just setting flag in interrupt handler
 }
 
 void SPEED_init (void)
 {
-    //PAS pin as external input pin interrupt
+    //Wheel revolution pin as external input pin interrupt
     GPIO_Init(SPEED__PORT,
               SPEED__PIN,
               GPIO_MODE_IN_PU_IT); // with Pullup and external interrupt

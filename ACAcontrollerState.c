@@ -112,12 +112,14 @@ uint8_t  ui8_hall_order_counter = 5;
 
 uint16_t ui16_speed_kph_to_erps_ratio = 0;
 
-uint32_t ui32_speed_sensor_rpks; //speed sensor rounds per 1000 sec
+
+uint32_t ui32_wheel_revolutions_per_second_x_resolution_factor; // Wheel sensor revolutions per second multiplied by 1000
 uint32_t ui32_speed_sensor_rpks_accumulated = 0;
 uint16_t ui16_time_ticks_between_speed_interrupt = 64000L; //speed in timetics
 uint16_t ui16_time_ticks_for_speed_calculation = 0; //time tics for speed measurement
 uint16_t ui16_time_ticks_for_uart_timeout = 0;
-uint8_t  ui8_SPEED_Flag = 0; //flag for SPEED interrupt
+
+uint8_t  ui8_wheel_rotation_sensor_flag = 0; //flag for SPEED interrupt
 uint8_t  ui8_offroad_counter = 0; //counter for offroad switching procedure
 uint16_t ui16_idle_counter = 0;
 uint16_t ui16_no_pass_counter = 3000;

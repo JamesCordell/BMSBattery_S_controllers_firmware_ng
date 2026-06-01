@@ -86,9 +86,12 @@ uint32_t PI_control(uint16_t pv, uint16_t setpoint, uint8_t uint_PWM_Enable) {
     return ((uint32_t) (float_dc));
 }
 
-void updateSpeeds(void) {
+uint8_t get_speed(void) {
     // Update speed after speed interrupt occurrence
-    if (ui8_SPEED_Flag) {
+	uint8_t pas_int = 0;
+    if (ui8_wheel_rotation_sensor_flag) {
+		pas_int = 1;
+        ui8_wheel_rotation_sensor_flag = 0;         //reset interrupt flag
         if (ui16_time_ticks_for_speed_calculation > 1500) {
             //ignore spikes speed information, Do nothing if derived speed would be greater ca. 82km/h with 28" wheel
             ui16_time_ticks_between_speed_interrupt = ui16_time_ticks_for_speed_calculation;             //save recent speed
@@ -96,22 +99,21 @@ void updateSpeeds(void) {
 
             ui32_speed_sensor_rpks_accumulated -= ui32_speed_sensor_rpks_accumulated >> 2;
             ui32_speed_sensor_rpks_accumulated += (((uint32_t)ui16_pwm_cycles_second)*1000) / ((uint32_t) ui16_time_ticks_between_speed_interrupt);             // speed in rounds per 1000 seconds
-            ui32_speed_sensor_rpks = ui32_speed_sensor_rpks_accumulated >> 2;             //tic frequency 15625 Hz
+            ui32_wheel_revolutions_per_second_x_resolution_factor = ui32_speed_sensor_rpks_accumulated >> 2;             //tic frequency 15625 Hz
         }
-
-        ui8_SPEED_Flag = 0;         //reset interrupt flag
 
     }
     //if wheel isn't turning, reset speed
     // FIXME, the following is gathered from two places that were executed just in that order
     // distinction 40000/65529 doesn't really make much sense
     if (ui16_time_ticks_for_speed_calculation > 40000) {
-        ui32_speed_sensor_rpks = 0;
+        ui32_wheel_revolutions_per_second_x_resolution_factor = 0;
     }
     if (ui16_time_ticks_for_speed_calculation > 65529 && ui16_time_ticks_between_speed_interrupt != 65530) {
         ui16_time_ticks_between_speed_interrupt = 65530;         //Set Display to 0 km/h
         PAS_act = 0;         //Set PAS indicator to 0 to avoid motor startig, if pushing backwards from standstill
     }
+	return pas_int;
 }
 
 uint32_t CheckSpeed(uint16_t current_target, uint16_t speed, uint16_t softLimit, uint16_t hardLimit) {

@@ -89,13 +89,13 @@ extern uint8_t  ui8_hall_order_counter;
 extern uint8_t  ui8_gear_ratio;
 extern uint16_t ui16_speed_kph_to_erps_ratio;
 
-extern uint32_t ui32_speed_sensor_rpks; //speed sensor rounds per 1000 sec
+extern uint32_t ui32_wheel_revolutions_per_second_x_resolution_factor; //wheel speed sensor revolutions per second * 1000
 extern uint32_t ui32_speed_sensor_rpks_accumulated;
 
 extern uint16_t ui16_time_ticks_for_uart_timeout;
 extern uint16_t ui16_time_ticks_for_speed_calculation;
 extern uint16_t ui16_time_ticks_between_speed_interrupt; //Counter for bike speed
-extern uint8_t  ui8_SPEED_Flag; //Flag for PAS Interrupt detected
+extern uint8_t  ui8_wheel_rotation_sensor_flag; //Flag for PAS Interrupt detected
 extern uint16_t ui16_time_ticks_between_speed_interrupt; //Speed duration of one wheel revolution (tics * 64us)
 extern uint8_t  ui8_offroad_counter;
 extern uint16_t ui16_idle_counter;

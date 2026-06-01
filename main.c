@@ -140,11 +140,15 @@ int main(void) {
     #ifdef DIAGNOSTICS
     printf("System initialized\r\n");
     #endif
+	uint8_t pas_i =0 ;
     while (1) {
 
         uart_send_if_avail();
 
-        updateSpeeds();
+        uint8_t pas_int = get_speed();
+		if (pas_int) {
+			pas_i = pas_int;
+		}
 
         updatePasStatus();
 
@@ -187,11 +191,11 @@ int main(void) {
                 if (ui8_ultraslowloop_counter > 10) { // 1 Hz
                     ui8_ultraslowloop_counter = 0;
                     ui8_uptime_seconds++;
-                }
+
 
                 #ifdef DIAGNOSTICS
                 //uint32_torquesensorCalibration=80;
-                printf("sp:%u cs:%u, ct:%u, pas:%u, bc:%u, bv:%u st:%u, tq:cal%u, mserps:%u, th:%u pBc:%u br:\r\n",
+                printf("sp:%u cs:%u, ct:%u, pas:%u, bc:%u, bv:%u st:%u, tq:cal%u, mserps:%u, th:%u pBc:%u speed:%lu pas:%u\r\n",
                        ui16_setpoint,
                        ui16_control_state,
                        (uint16_t) uint32_current_target,
@@ -202,12 +206,14 @@ int main(void) {
                        (uint16_t)uint32_torquesensorCalibration,
                        ui16_motor_speed_erps,
                        ui8_adc_read_throttle(),
-                       ui8_adc_read_phase_B_current()
+                       ui8_adc_read_phase_B_current(),
+					   ui32_wheel_revolutions_per_second_x_resolution_factor,
+					   pas_i
                        );
-
+				pas_i = 0;
                 // printf("erps %d, motorstate %d, cyclecountertotal %d", ui16_motor_speed_erps, ui8_possible_motor_state|ui8_dynamic_motor_state, ui16_PWM_cycles_counter_total);
 
-                //printf("cheatstate, %d, km/h %lu, Voltage, %d, setpoint %d, erps %d, current %d, correction_value, %d\n", ui8_offroad_state, ui32_speed_sensor_rpks, ui8_BatteryVoltage, ui16_setpoint, ui16_motor_speed_erps, ui16_BatteryCurrent, ui8_position_correction_value);
+                //printf("cheatstate, %d, km/h %lu, Voltage, %d, setpoint %d, erps %d, current %d, correction_value, %d\n", ui8_offroad_state, ui32_wheel_revolutions_per_second_x_resolution_factor, ui8_BatteryVoltage, ui16_setpoint, ui16_motor_speed_erps, ui16_BatteryCurrent, ui8_position_correction_value);
 
                 //printf("kv %d, erps %d, R %d\n", (uint16_t)(float_kv*10.0) , ui16_motor_speed_erps, (uint16_t)(float_R*1000.0));
 
@@ -221,9 +227,10 @@ int main(void) {
                 //printf("%d, %d, %d, %d, %d, %d, %d,\r\n", ui8_position_correction_value, ui16_BatteryCurrent, ui16_setpoint, ui8_regen_throttle, ui16_motor_speed_erps, ui16_ADC_iq_current>>2,ui16_adc_read_battery_voltage());
 
 
-                //printf("correction angle %d, Current %d, Voltage %d, sumtorque %d, setpoint %d, km/h %lu\n",ui8_position_correction_value, i16_deziAmps, ui8_BatteryVoltage, ui16_sum_throttle, ui16_setpoint, ui32_speed_sensor_rpks);
+                //printf("correction angle %d, Current %d, Voltage %d, sumtorque %d, setpoint %d, km/h %lu\n",ui8_position_correction_value, i16_deziAmps, ui8_BatteryVoltage, ui16_sum_throttle, ui16_setpoint, ui32_wheel_revolutions_per_second_x_resolution_factor);
 
                 #endif
+				}
             }            //end of very slow loop
 
             debug_pin_reset();
