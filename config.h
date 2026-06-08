@@ -11,13 +11,13 @@
 /* Unless there is a L in the number all values can only be a minimum of 0 through to 255*/
 
 #define NUMBER_OF_PAS_MAGS 12                   // The number of magnets on the crank used by the PAS sensor.
-#define wheel_circumference 1040L               // The distance in mm the wheel covers in one revolution.
+#define WHEEL_CIRCUMFERENCE 2010L               // The distance in mm the wheel covers in one revolution.
 #define limit 80                                // Overall maximum speed limit, all speeds are in k/h
 #define limit_with_throttle_override 80
 #define limit_without_pas 80                    // The speed limit without pedal asssit.
 #define timeout 3125U
 
-#define ADC_THROTTLE_MIN_VALUE 46               // The Miinimum throttle value
+#define ADC_THROTTLE_MIN_VALUE 52               // The Miinimum throttle value
 #define ADC_THROTTLE_MAX_VALUE 181              // The Maximum throttle value
 #define DO_CRUISE_CONTROL 0                     // Cruise control
 

@@ -44,6 +44,7 @@ EXTRASRCS = \
 	$(SDIR)/stm8s_uart2.c \
 	$(SDIR)/stm8s_tim1.c \
 	$(SDIR)/stm8s_tim2.c \
+	$(SDIR)/stm8s_tim3.c \
 	$(SDIR)/stm8s_adc1.c \
 	$(SDIR)/stm8s_flash.c \
 	BOdisplay.c \

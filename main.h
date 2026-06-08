@@ -34,11 +34,7 @@
 #define MIDDLE_PWM_VALUE_DUTY_CYCLE_MAX (PWM_VALUE_DUTY_CYCLE_MAX/2)
 
 
-extern uint16_t ui16_log1;
-extern uint16_t ui16_log2;
-extern uint8_t  ui8_log;
 extern uint8_t  ui8_slowloop_flag;      //Flag for slow loop timing
-
 
 uint8_t update_advance_angle(void);
 #endif

@@ -89,7 +89,6 @@ extern uint8_t  ui8_hall_order_counter;
 extern uint8_t  ui8_gear_ratio;
 extern uint16_t ui16_speed_kph_to_erps_ratio;
 
-extern uint32_t ui32_wheel_revolutions_per_second_x_resolution_factor; //wheel speed sensor revolutions per second * 1000
 extern uint32_t ui32_speed_sensor_rpks_accumulated;
 
 extern uint16_t ui16_time_ticks_for_uart_timeout;

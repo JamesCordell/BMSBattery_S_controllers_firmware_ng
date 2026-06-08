@@ -13,7 +13,6 @@
 #include "stm8s_itc.h"
 #include "stm8s_gpio.h"
 #include "interrupts.h"
-#include "stm8s_tim2.h"
 #include "motor.h"
 #include "main.h"
 #include "uart.h"
@@ -37,18 +36,11 @@
 //uint16_t ui16_LPF_angle_adjust = 0;
 //uint16_t ui16_LPF_angle_adjust_temp = 0;
 
-uint16_t       ui16_log1 = 0;
 uint8_t        ui8_slowloop_flag = 0;
 uint8_t        ui8_veryslowloop_counter = 0;
 
 uint8_t        ui8_ultraslowloop_counter = 0;
-uint16_t       ui16_log2 = 0;
-uint8_t        ui8_log = 0;
-uint8_t        ui8_i = 0; //counter for ... next loop
 
-float          float_kv = 0;
-float          float_R = 0;
-uint8_t        a = 0; //loop counter
 
 static int16_t i16_deziAmps;
 
@@ -86,12 +78,11 @@ void TIM1_UPD_OVF_TRG_BRK_IRQHandler(void) __interrupt(TIM1_UPD_OVF_TRG_BRK_IRQH
 // Timer2/slow control loop
 void TIM2_UPD_OVF_TRG_BRK_IRQHandler(void) __interrupt(TIM2_UPD_OVF_TRG_BRK_IRQHANDLER);
 
+
 // UART2 receivce handler
 void UART2_IRQHandler(void) __interrupt(UART2_IRQHANDLER);
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(void) {
     //set clock at the max 16MHz
@@ -103,6 +94,7 @@ int main(void) {
     debug_pin_init();
     light_pin_init();
     timer2_init();
+	timer3_init();
     uart_init();
     eeprom_init();
 
@@ -140,15 +132,11 @@ int main(void) {
     #ifdef DIAGNOSTICS
     printf("System initialized\r\n");
     #endif
-	uint8_t pas_i =0 ;
+
     while (1) {
-
-        uart_send_if_avail();
-
-        uint8_t pas_int = get_speed();
-		if (pas_int) {
-			pas_i = pas_int;
-		}
+		disableInterrupts();
+            uart_send_if_avail();
+		enableInterrupts();
 
         updatePasStatus();
 
@@ -195,7 +183,7 @@ int main(void) {
 
                 #ifdef DIAGNOSTICS
                 //uint32_torquesensorCalibration=80;
-                printf("sp:%u cs:%u, ct:%u, pas:%u, bc:%u, bv:%u st:%u, tq:cal%u, mserps:%u, th:%u pBc:%u speed:%lu pas:%u\r\n",
+                printf("sp:%u cs:%u, ct:%u, pas:%u, bc:%u, bv:%u st:%u, tq:cal%u, mserps:%u, th:%u pBc:%u wrpms:%u wrps:%u\r\n",
                        ui16_setpoint,
                        ui16_control_state,
                        (uint16_t) uint32_current_target,
@@ -207,27 +195,9 @@ int main(void) {
                        ui16_motor_speed_erps,
                        ui8_adc_read_throttle(),
                        ui8_adc_read_phase_B_current(),
-					   ui32_wheel_revolutions_per_second_x_resolution_factor,
-					   pas_i
+					   ui16_wheel_rotation_per_msec,
+                       ui8_wheel_rotation_per_sec
                        );
-				pas_i = 0;
-                // printf("erps %d, motorstate %d, cyclecountertotal %d", ui16_motor_speed_erps, ui8_possible_motor_state|ui8_dynamic_motor_state, ui16_PWM_cycles_counter_total);
-
-                //printf("cheatstate, %d, km/h %lu, Voltage, %d, setpoint %d, erps %d, current %d, correction_value, %d\n", ui8_offroad_state, ui32_wheel_revolutions_per_second_x_resolution_factor, ui8_BatteryVoltage, ui16_setpoint, ui16_motor_speed_erps, ui16_BatteryCurrent, ui8_position_correction_value);
-
-                //printf("kv %d, erps %d, R %d\n", (uint16_t)(float_kv*10.0) , ui16_motor_speed_erps, (uint16_t)(float_R*1000.0));
-
-                /*for(a = 0; a < 6; a++) {			// sum up array content
-                                 putchar(uint8_t_hall_case[a]);
-                                 }
-                   putchar(ui16_ADC_iq_current>>2);
-                   putchar(ui8_position_correction_value);
-                   putchar(255);*/
-                //printf("hall:%d, %d, %d, %d, %d, %d\r\n", (uint16_t) uint8_t_hall_case[0], (uint16_t)uint8_t_hall_case[1],(uint16_t) uint8_t_hall_case[2],(uint16_t) uint8_t_hall_case[3], (uint16_t)uint8_t_hall_case[4], (uint16_t)uint8_t_hall_case[5]);
-                //printf("%d, %d, %d, %d, %d, %d, %d,\r\n", ui8_position_correction_value, ui16_BatteryCurrent, ui16_setpoint, ui8_regen_throttle, ui16_motor_speed_erps, ui16_ADC_iq_current>>2,ui16_adc_read_battery_voltage());
-
-
-                //printf("correction angle %d, Current %d, Voltage %d, sumtorque %d, setpoint %d, km/h %lu\n",ui8_position_correction_value, i16_deziAmps, ui8_BatteryVoltage, ui16_sum_throttle, ui16_setpoint, ui32_wheel_revolutions_per_second_x_resolution_factor);
 
                 #endif
 				}

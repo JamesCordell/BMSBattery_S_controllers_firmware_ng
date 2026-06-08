@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "stm8s_gpio.h"
-#include "stm8s_tim1.h"
+
 #include "stm8s.h"
 #include "stm8s_tim2.h"
 #include "main.h"
@@ -31,17 +31,15 @@ void timer2_init (void)
 
 }
 
-
-
-
 //interrupt routine for slow control loop timing
 void TIM2_UPD_OVF_TRG_BRK_IRQHandler(void) __interrupt(TIM2_UPD_OVF_TRG_BRK_IRQHANDLER)
 {
     ui8_slowloop_flag = 1;
-    //printf("SlowTimetic\n");
+
     // clear the interrupt pending bit for TIM2
     TIM2_ClearITPendingBit(TIM2_IT_UPDATE);
 }
+
 
 
 #define CLOCKFREQ   (16000000L)

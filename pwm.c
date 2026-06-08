@@ -7,11 +7,9 @@
  */
 
 #include <stdint.h>
-#include <stdio.h>
 #include "stm8s_gpio.h"
 #include "stm8s_tim1.h"
 #include "motor.h"
-#include "gpio.h"
 #include "motor.h"
 #include "pwm.h"
 #include "config.h"

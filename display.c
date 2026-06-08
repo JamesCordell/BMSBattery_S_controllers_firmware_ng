@@ -22,15 +22,8 @@
 #include <stdio.h>
 #include "stm8s.h"
 #include "display.h"
-#include "main.h"
 #include "config.h"
-#include "stm8s_itc.h"
-#include "uart.h"
 #include "adc.h"
-#include "brake.h"
-#include "ACAeeprom.h"
-#include "interrupts.h"
-#include "ACAcontrollerState.h"
 
 #ifdef DISPLAY_TYPE_KT_LCD3
 

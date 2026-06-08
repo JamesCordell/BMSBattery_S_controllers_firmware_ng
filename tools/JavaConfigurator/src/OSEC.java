@@ -1127,7 +1127,7 @@ public class OSEC extends JFrame {
 					iWriter.println(txtPasTimeout.getText());
 					pWriter.println(text_to_save);
 
-					text_to_save = "#define wheel_circumference " + txtWheelCircumference.getText() + "L";
+					text_to_save = "#define WHEEL_CIRCUMFERENCE " + txtWheelCircumference.getText() + "L";
 					iWriter.println(txtWheelCircumference.getText());
 					pWriter.println(text_to_save);
 

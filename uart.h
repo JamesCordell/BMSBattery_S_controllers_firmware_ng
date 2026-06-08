@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 
-#define UART_RINGBUFFER_SIZE 128
+#define UART_RINGBUFFER_SIZE 255
 #define UART_EMPTY_INDICATOR 255
 #define UART_PACKET_TIMEOUT_TICKS 312 // 20000 uS / 64 uS
 

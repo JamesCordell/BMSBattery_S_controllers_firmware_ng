@@ -35,15 +35,12 @@ uint8_t  ui8_interpolation_start_position = 0;
 
 uint8_t  ui8_interpolation_angle = 0;
 
-uint16_t ui16_adc_current_phase_B = 0;
-uint16_t ui16_adc_current_phase_B_accumulated = 0;
-uint16_t ui16_adc_current_phase_B_filtered = 0;
 
 int8_t   hall_sensors;
 int8_t   hall_sensors_last = 0;
 
 uint16_t ui16_ADC_iq_current_accumulated = 4096;
-uint16_t ui16_iq_current_ma = 0;
+
 
 void TIM1_UPD_OVF_TRG_BRK_IRQHandler(void) __interrupt(TIM1_UPD_OVF_TRG_BRK_IRQHANDLER) {
     adc_trigger();

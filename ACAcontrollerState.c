@@ -113,7 +113,6 @@ uint8_t  ui8_hall_order_counter = 5;
 uint16_t ui16_speed_kph_to_erps_ratio = 0;
 
 
-uint32_t ui32_wheel_revolutions_per_second_x_resolution_factor; // Wheel sensor revolutions per second multiplied by 1000
 uint32_t ui32_speed_sensor_rpks_accumulated = 0;
 uint16_t ui16_time_ticks_between_speed_interrupt = 64000L; //speed in timetics
 uint16_t ui16_time_ticks_for_speed_calculation = 0; //time tics for speed measurement

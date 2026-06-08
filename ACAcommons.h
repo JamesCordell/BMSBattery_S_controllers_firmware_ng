@@ -32,7 +32,6 @@ uint8_t readAndClearSignal(uint8_t signal);
 void updateHallOrder(uint8_t hall_sensors);
 void updateSlowLoopStates(void);
 void initErpsRatio(void);
-uint8_t get_speed(void);
 void updateX4(void);
 void updateLight(void);
 void updatePasStatus(void);
