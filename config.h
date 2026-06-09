@@ -45,8 +45,8 @@
 #define RAMP_START 64000
 #define RAMP_END 1500
 
-#define P_FACTOR 0.5
-#define I_FACTOR 0.1
+#define P_FACTOR 0.7
+#define I_FACTOR 1.8
 #define GEAR_RATIO 106L
 #define PAS_THRESHOLD 1.9
 
@@ -84,12 +84,12 @@
 #define CFG_BYPASS_LOW_SPEED_REGEN_PI_CONTROL   256U
 #define CFG_DYN_ASSIST                          512U
 #define CFG_POWER_BASED_CONTROL_ENABLED         1024U
-#define CFG_TQ_SENSOR_MODE                      2048U
+#define CFG_TQ_SENSOR_MODE                      2048U  // if enabled max wheel speed is slower
 #define CFG_CORRECTION_ENABLED                  4096U
 #define CFG_EXTERNAL_SPEED_SENSOR               8192U  // Enabling this adds throttle delay.
 #define CFG_IDLE_DISABLES_OFFROAD               16384U
 
-#define ACA (CFG_DEFAULT_BASELINE_FLAG | CFG_CORRECTION_ENABLED | CFG_DYN_ASSIST | CFG_TQ_SENSOR_MODE)
+#define ACA (CFG_DEFAULT_BASELINE_FLAG | CFG_CORRECTION_ENABLED )
 
 
 #define EEPROM_INIT_MAGIC_BYTE 240              // makes sure (chance of fail 1/255) eeprom is invalidated after flashing new config

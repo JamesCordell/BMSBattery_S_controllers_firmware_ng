@@ -138,6 +138,7 @@ uint16_t aca_setpoint(
     ui32_sumthrottle_accumulated -= ui32_sumthrottle_accumulated >> 10;
     ui32_sumthrottle_accumulated += ui16_sum_throttle;
     ui8_assist_dynamic_percent_addon = ui32_sumthrottle_accumulated >> 10;
+
     if ((ui8_assist_dynamic_percent_addon + ui8_assist_percent_actual) > 100) {
         ui8_assist_dynamic_percent_addon = 100 - ui8_assist_percent_actual;
     }
@@ -239,18 +240,19 @@ uint16_t aca_setpoint(
             }
         } else {         // torque sensor mode
 
-            //erst mal alles aufmultiplizieren, damit beim Teilen was über 1 übrig bleibt. Bitte mal überschlagen, ob die int32 da nicht überlaufen kann...
+            //First, multiply everything up so that when dividing, there's something greater than 1 left over. Please do a quick calculation to see if the int32 value might overflow...
             uint32_temp = ui16_sum_torque;
             uint32_temp *= ui8_assist_percent_actual;
             uint32_temp *= ui16_battery_current_max_value;
             uint32_temp *= uint32_torquesensorCalibration;
 
-            uint32_temp /= ui16_time_ticks_between_pas_interrupt_smoothed;             // hier lässt sich die geteilt-Operation nicht vermeiden :-(
+            uint32_temp /= ui16_time_ticks_between_pas_interrupt_smoothed;  //The split operation cannot be avoided here :-(
 
-            if (PAS_is_active)
+            if (PAS_is_active) {
                 uint32_current_target = (uint32_temp >>8) +  (uint32_t) ui16_current_cal_b;         //right shift 15 fasst die Operationen /100 (annähernd >>7) aus der assist_percent und /255 ( >>8) aus dem battery_current max zusammen, ist nicht ganz korrekt, ggf. nur >>14 nehmen -->/(256*128) vs. /(256*64)
-            else uint32_current_target = (uint32_t) ui16_current_cal_b;
-
+            } else {
+                uint32_current_target = (uint32_t) ui16_current_cal_b;
+            }
             controll_state_temp += 4;
         }
 
