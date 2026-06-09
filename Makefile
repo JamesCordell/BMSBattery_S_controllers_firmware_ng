@@ -101,6 +101,9 @@ hex:
 flash:
 	$(STM8FLASH)stm8flash -cstlinkv2 -pstm8s105?6 -w$(PNAME).bin
 
+flashopt:
+	$(STM8FLASH)stm8flash -c stlinkv2 -p stm8s105?6 -s opt -w opt_afr.bin
+
 unlock:
 	$(STM8FLASH)stm8flash -cstlinkv2 -pstm8s105?6 -u
 
