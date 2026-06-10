@@ -24,6 +24,13 @@
 #include "display.h"
 #include "config.h"
 #include "adc.h"
+#include "ACAcontrollerState.h"
+#include "ACAeeprom.h"
+#include "brake.h"
+#include "uart.h"
+#include "SPEED.h"
+
+uint16_t                                   ui16_wheel_period_ms = 4500;  //4500 is considered 0 speed
 
 #ifdef DISPLAY_TYPE_KT_LCD3
 
@@ -36,7 +43,7 @@ uint8_t           battery_percent_fromcapacity = 11; //hier nur als Konstante um
 uint8_t                                    ui8_tx_buffer[12];
 uint8_t                                    ui8_j;
 uint8_t                                    ui8_crc;
-uint16_t                                   ui16_wheel_period_ms = 4500;
+
 uint16_t                                   ui16_battery_bars_calc = 0;
 uint8_t                                    ui8_battery_soc = 12;
 uint8_t                                    ui16_error;
@@ -65,10 +72,10 @@ void send_message(void) {
 
 
     if (((ui16_aca_flags & EXTERNAL_SPEED_SENSOR) == EXTERNAL_SPEED_SENSOR)) {
-        if (ui16_time_ticks_between_speed_interrupt > 65000) {
+        if (ui16_wheel_rotation_per_msec > 4000) {
             ui16_wheel_period_ms = 4500;
         } else {
-            ui16_wheel_period_ms = (uint16_t) ((float) ui16_time_ticks_between_speed_interrupt / ((float) ui16_pwm_cycles_second / 1000.0));             //must be /1000 devided in /125/8 for better resolution
+            ui16_wheel_period_ms = ui16_wheel_rotation_per_msec; 
         }
     }else{
         if (ui32_erps_filtered == 0) {

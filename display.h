@@ -56,6 +56,7 @@ extern uint8_t           battery_percent_fromvoltage;
 extern uint8_t           battery_percent_fromcapacity;
 extern uint32_t          wheel_time;
 extern float             current_display;
+extern uint16_t          ui16_wheel_period_ms;
 
 
 #ifdef DISPLAY_TYPE_KT_LCD3

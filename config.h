@@ -17,16 +17,16 @@
 #define limit_without_pas 80                    // The speed limit without pedal asssit.
 #define timeout 3125U
 
-#define ADC_THROTTLE_MIN_VALUE 52               // The Miinimum throttle value
+#define ADC_THROTTLE_MIN_VALUE 48               // The Miinimum throttle value
 #define ADC_THROTTLE_MAX_VALUE 181              // The Maximum throttle value
 #define DO_CRUISE_CONTROL 0                     // Cruise control
 
-#define BATTERY_VOLTAGE_MIN_VALUE 0           // Used to calibrate how full the battery is.
+#define BATTERY_VOLTAGE_MIN_VALUE 0             // Used to calibrate how full the battery is.
 #define BATTERY_VOLTAGE_MAX_VALUE 255
 
-#define BATTERY_CURRENT_MAX_VALUE 420L          // Limits the maximum current.
-#define PHASE_CURRENT_MAX_VALUE 100L
-#define REGEN_CURRENT_MAX_VALUE 40L
+#define BATTERY_CURRENT_MAX_VALUE 27L          // Limits the maximum current.
+#define PHASE_CURRENT_MAX_VALUE 25L
+#define REGEN_CURRENT_MAX_VALUE 1L
 #define current_cal_a 1
 
 #define MOTOR_ROTOR_DELTA_PHASE_ANGLE_RIGHT 0
@@ -45,7 +45,7 @@
 #define RAMP_START 64000
 #define RAMP_END 1500
 
-#define P_FACTOR 0.7
+#define P_FACTOR 0.5
 #define I_FACTOR 1.8
 #define GEAR_RATIO 106L
 #define PAS_THRESHOLD 1.9
@@ -86,10 +86,11 @@
 #define CFG_POWER_BASED_CONTROL_ENABLED         1024U
 #define CFG_TQ_SENSOR_MODE                      2048U  // if enabled max wheel speed is slower
 #define CFG_CORRECTION_ENABLED                  4096U
-#define CFG_EXTERNAL_SPEED_SENSOR               8192U  // Enabling this adds throttle delay.
+// Enable CFG_EXTERNAL_SPEED_SENSOR this if you have a feewheel hub as speed will be calculated when motor is not turning. Disable this if direct drive motor. 
+#define CFG_EXTERNAL_SPEED_SENSOR               8192U  
 #define CFG_IDLE_DISABLES_OFFROAD               16384U
 
-#define ACA (CFG_DEFAULT_BASELINE_FLAG | CFG_CORRECTION_ENABLED )
+#define ACA (CFG_DEFAULT_BASELINE_FLAG | CFG_CORRECTION_ENABLED | CFG_EXTERNAL_SPEED_SENSOR)
 
 
 #define EEPROM_INIT_MAGIC_BYTE 240              // makes sure (chance of fail 1/255) eeprom is invalidated after flashing new config
