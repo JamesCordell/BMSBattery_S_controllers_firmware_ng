@@ -28,7 +28,7 @@
 static uint32_t ui32_dutycycle; // local version of setpoint
 
 static int8_t   uint_PWM_Enable = 0; //flag for PWM state
-static uint16_t ui16_BatteryCurrent_accumulated = 2496L; //8x current offset, for filtering or Battery Current
+static uint16_t ui16_battery_current_accumulated = 2496L; //8x current offset, for filtering or Battery Current
 static uint16_t ui16_BatteryVoltage_accumulated;
 static uint16_t ui16_assist_percent_smoothed;
 static uint32_t ui32_time_ticks_between_pas_interrupt_accumulated = 0; // for filtering of PAS value
@@ -68,7 +68,7 @@ BitStatus checkUnderVoltageOverride(void){
     if (ui8_BatteryVoltage < ui8_temp) {
 
         uint32_current_target = map(ui8_BatteryVoltage, ui8_s_battery_voltage_min, ui8_temp, ui16_current_cal_b, uint32_current_target );
-        ui32_dutycycle = PI_control(ui16_BatteryCurrent, uint32_current_target,uint_PWM_Enable);
+        ui32_dutycycle = PI_control(ui16_battery_current, uint32_current_target,uint_PWM_Enable);
         controll_state_temp += 2048;
         return 1;
     }
@@ -81,7 +81,7 @@ BitStatus checkOverVoltageOverride(void){
     if (ui8_BatteryVoltage > ui8_temp) {
 
         uint32_current_target = map(ui8_BatteryVoltage, ui8_temp, ui8_s_battery_voltage_max, uint32_current_target, ui16_current_cal_b );
-        ui32_dutycycle = PI_control(ui16_BatteryCurrent, uint32_current_target,uint_PWM_Enable);
+        ui32_dutycycle = PI_control(ui16_battery_current, uint32_current_target,uint_PWM_Enable);
         controll_state_temp += 4096;
         return 1;
     }
@@ -102,12 +102,12 @@ uint16_t aca_setpoint(
     // select virtual erps speed based on speedsensor type
     if (((ui16_aca_flags & EXTERNAL_SPEED_SENSOR) == EXTERNAL_SPEED_SENSOR)) {
     //ui16_virtual_erps_speed = (uint16_t) ((((uint32_t)ui8_gear_ratio) * ui32_wheel_revolutions_per_second_x_resolution_factor) / 1000);
-        ui16_virtual_erps_speed = (uint16_t)ui8_wheel_rotation_per_sec * GEAR_RATIO;
+        ui16_virtual_erps_speed = (uint16_t)(976 / ui16_wheel_rotation_per_ms) * GEAR_RATIO;
     } else {
         ui16_virtual_erps_speed = (uint16_t) ui32_erps_filtered;
     }
 
-    if (ui8_wheel_rotation_per_sec == 0) { //Set PAS indicator to 0 to avoid motor startig, if pushing backwards from standstill
+    if (ui16_wheel_rotation_per_ms == UINT16_MAX) { //Set PAS indicator to 0 to avoid motor startig, if pushing backwards from standstill
         PAS_act = 0;
     }
 
@@ -118,7 +118,7 @@ uint16_t aca_setpoint(
         ui8_speedlimit_actual_kph = ui8_speedlimit_kph + (ui8_offroad_state - 16);
     } else if (ui8_offroad_state > 15 && ui16_sum_throttle > 2) {
         ui8_speedlimit_actual_kph = ui8_speedlimit_with_throttle_override_kph + (ui8_offroad_state - 16);
-    } else if (ui16_time_ticks_for_pas_calculation > timeout || !PAS_is_active) {
+    } else if (ui16_time_ticks_for_pas_calculation > IDLE_TIMEOUT || !PAS_is_active) {
         ui8_speedlimit_actual_kph = ui8_speedlimit_without_pas_kph;
     } else {
         ui8_speedlimit_actual_kph = ui8_speedlimit_kph;
@@ -143,9 +143,9 @@ uint16_t aca_setpoint(
         ui8_assist_dynamic_percent_addon = 100 - ui8_assist_percent_actual;
     }
 
-    ui16_BatteryCurrent_accumulated -= ui16_BatteryCurrent_accumulated >> 3;
-    ui16_BatteryCurrent_accumulated += ui16_adc_read_motor_total_current;
-    ui16_BatteryCurrent = ui16_BatteryCurrent_accumulated >> 3;
+    ui16_battery_current_accumulated -= ui16_battery_current_accumulated >> 3;
+    ui16_battery_current_accumulated += ui16_adc_read_motor_total_current;
+    ui16_battery_current = ui16_battery_current_accumulated >> 3;
 
     ui16_BatteryVoltage_accumulated -= ui16_BatteryVoltage_accumulated >> 3;
     ui16_BatteryVoltage_accumulated += ui8_adc_read_battery_voltage;
@@ -199,7 +199,7 @@ uint16_t aca_setpoint(
         uint32_current_target = (uint32_t) ui16_current_cal_b - float_temp;
 
         if (!checkOverVoltageOverride()) {
-            ui32_dutycycle = PI_control(ui16_BatteryCurrent, uint32_current_target,uint_PWM_Enable);
+            ui32_dutycycle = PI_control(ui16_battery_current, uint32_current_target,uint_PWM_Enable);
         }
 
         if (((ui16_aca_flags & BYPASS_LOW_SPEED_REGEN_PI_CONTROL) == BYPASS_LOW_SPEED_REGEN_PI_CONTROL) && (ui32_dutycycle == 0)) {
@@ -228,14 +228,14 @@ uint16_t aca_setpoint(
                 //if you are pedaling slower than defined ramp end
                 //or not pedalling at all
                 //current is proportional to cadence
-                uint32_current_target = (ui8_temp * (ui16_battery_current_max_value) / 100);
+                uint32_current_target = (ui8_temp * (ui16_battery_current_max) / 100);
                 float_temp = 1.0 - (((float) (ui16_time_ticks_between_pas_interrupt_smoothed - ui16_s_ramp_end)) / ((float) (ui16_s_ramp_start - ui16_s_ramp_end)));
                 uint32_current_target = ((uint16_t) (uint32_current_target)*(uint16_t) (float_temp * 100.0)) / 100 + ui16_current_cal_b;
                 controll_state_temp += 1;
 
                 //in you are pedaling faster than in ramp end defined, desired battery current level is set,
             } else {
-                uint32_current_target = (ui8_temp * (ui16_battery_current_max_value) / 100 + ui16_current_cal_b);
+                uint32_current_target = (ui8_temp * (ui16_battery_current_max) / 100 + ui16_current_cal_b);
                 controll_state_temp += 2;
             }
         } else {         // torque sensor mode
@@ -243,7 +243,7 @@ uint16_t aca_setpoint(
             //First, multiply everything up so that when dividing, there's something greater than 1 left over. Please do a quick calculation to see if the int32 value might overflow...
             uint32_temp = ui16_sum_torque;
             uint32_temp *= ui8_assist_percent_actual;
-            uint32_temp *= ui16_battery_current_max_value;
+            uint32_temp *= ui16_battery_current_max;
             uint32_temp *= uint32_torquesensorCalibration;
 
             uint32_temp /= ui16_time_ticks_between_pas_interrupt_smoothed;  //The split operation cannot be avoided here :-(
@@ -275,7 +275,7 @@ uint16_t aca_setpoint(
             controll_state_temp += 8;
         }
 
-        float_temp = float_temp * (float) (ui16_battery_current_max_value) / 255.0 + (float) ui16_current_cal_b;         //calculate current target
+        float_temp = float_temp * (float) (ui16_battery_current_max) / 255.0 + (float) ui16_current_cal_b;         //calculate current target
 
 
         if ((uint32_t) float_temp > uint32_current_target) {
@@ -293,8 +293,8 @@ uint16_t aca_setpoint(
             controll_state_temp += 32;
         }
 
-        if (uint32_current_target > ui16_battery_current_max_value + ui16_current_cal_b) {
-            uint32_current_target = ui16_battery_current_max_value + ui16_current_cal_b;
+        if (uint32_current_target > ui16_battery_current_max + ui16_current_cal_b) {
+            uint32_current_target = ui16_battery_current_max + ui16_current_cal_b;
             controll_state_temp += 64;
         }
         //phase current limiting
@@ -317,7 +317,7 @@ uint16_t aca_setpoint(
 
             if (ui8_walk_assist) uint32_current_target = 10 + ui16_current_cal_b;
             //send current target to PI-controller
-            ui32_dutycycle = PI_control(ui16_BatteryCurrent, uint32_current_target,uint_PWM_Enable);
+            ui32_dutycycle = PI_control(ui16_battery_current, uint32_current_target,uint_PWM_Enable);
         }
 
         if ((ui16_aca_experimental_flags & PWM_AUTO_OFF) == PWM_AUTO_OFF) {

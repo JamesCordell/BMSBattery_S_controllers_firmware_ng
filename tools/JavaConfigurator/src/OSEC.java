@@ -1119,7 +1119,7 @@ public class OSEC extends JFrame {
 					iWriter.println(txtNumberOfPas.getText());
 					pWriter.println(text_to_save);
 
-					text_to_save = "#define limit " + txtSpeedlimit.getText();
+					text_to_save = "#define SPEED_LIMIT_KPH " + txtSpeedlimit.getText();
 					iWriter.println(txtSpeedlimit.getText());
 					pWriter.println(text_to_save);
 
@@ -1127,7 +1127,7 @@ public class OSEC extends JFrame {
 					iWriter.println(txtPasTimeout.getText());
 					pWriter.println(text_to_save);
 
-					text_to_save = "#define WHEEL_CIRCUMFERENCE " + txtWheelCircumference.getText() + "L";
+					text_to_save = "#define WHEEL_CIRCUMFERENCE_MM " + txtWheelCircumference.getText() + "L";
 					iWriter.println(txtWheelCircumference.getText());
 					pWriter.println(text_to_save);
 
@@ -1230,7 +1230,7 @@ public class OSEC extends JFrame {
 					iWriter.println(ramp_start.getText());
 					pWriter.println(text_to_save);
 
-					text_to_save = "#define limit_with_throttle_override " + txtSpeedlimitWithThrottleOverride.getText();
+					text_to_save = "#define LIMIT_WITH_THROTTLE_OVERRIDE " + txtSpeedlimitWithThrottleOverride.getText();
 					iWriter.println(txtSpeedlimitWithThrottleOverride.getText());
 					pWriter.println(text_to_save);
 

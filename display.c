@@ -30,8 +30,6 @@
 #include "uart.h"
 #include "SPEED.h"
 
-uint16_t                                   ui16_wheel_period_ms = 4500;  //4500 is considered 0 speed
-
 #ifdef DISPLAY_TYPE_KT_LCD3
 
 display_view_type display_view;
@@ -70,17 +68,13 @@ void send_message(void) {
     //if (throttle_is_set ()) { ui8_moving_indication |= (1 << 1); }
     //if (pas_is_set ()) { ui8_moving_indication |= (1 << 4); }
 
-
+    uint16_t  ui16_wheel_period_ms = 4500;  //4500 is considered 0 speed
     if (((ui16_aca_flags & EXTERNAL_SPEED_SENSOR) == EXTERNAL_SPEED_SENSOR)) {
-        if (ui16_wheel_rotation_per_msec > 4000) {
-            ui16_wheel_period_ms = 4500;
-        } else {
-            ui16_wheel_period_ms = ui16_wheel_rotation_per_msec; 
+        if (ui16_wheel_rotation_per_ms < 4000) {
+            ui16_wheel_period_ms = ui16_wheel_rotation_per_ms; 
         }
     }else{
-        if (ui32_erps_filtered == 0) {
-            ui16_wheel_period_ms = 4500;
-        } else {
+        if (ui32_erps_filtered != 0) {
             ui16_wheel_period_ms = (uint16_t) (1000.0 * (float) ui8_gear_ratio / (float) ui32_erps_filtered);
         }
     }
@@ -88,7 +82,7 @@ void send_message(void) {
     // calc battery pack state of charge (SOC)
     ui16_battery_bars_calc = ui8_adc_read_battery_voltage() - ui8_s_battery_voltage_min;
     ui16_battery_bars_calc <<= 8;
-    ui16_battery_bars_calc /= (ui8_s_battery_voltage_max-ui8_s_battery_voltage_min);
+    ui16_battery_bars_calc /= (ui8_s_battery_voltage_max - ui8_s_battery_voltage_min);
 
     if (ui16_battery_bars_calc > 200) {
         ui8_battery_soc = 16;
@@ -138,9 +132,9 @@ void send_message(void) {
     // each unit of B8 = 0.25A
 
 
-    ui8_tx_buffer [8] = (uint8_t) ((((ui16_BatteryCurrent - ui16_current_cal_b + 1) << 2)*10) / ui8_current_cal_a);
+    ui8_tx_buffer [8] = (uint8_t) ((((ui16_battery_current - ui16_current_cal_b + 1) << 2)*10) / ui8_current_cal_a);   // display * 12
     // B9: motor temperature
-    ui8_tx_buffer [9] = i8_motor_temperature - 15;     //according to documentation at endless sphere
+    ui8_tx_buffer [9] = 20;     //according to documentation at endless sphere
     // B10 and B11: 0
     ui8_tx_buffer [10] = 0;
     ui8_tx_buffer [11] = 0;

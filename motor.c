@@ -156,13 +156,13 @@ void updateCorrection(void) {
         return;
     }
 
-    if (ui16_motor_speed_erps > 3 && ui16_BatteryCurrent > ui16_current_cal_b + 3) {     //normal riding,
+    if (ui16_motor_speed_erps > 3 && ui16_battery_current > ui16_current_cal_b + 3) {     //normal riding,
         if (ui16_ADC_iq_current >> 2 > 128 && ui8_position_correction_value < 143) {
             ui8_position_correction_value++;
         } else if (ui16_ADC_iq_current >> 2 < 126 && ui8_position_correction_value > 111) {
             ui8_position_correction_value--;
         }
-    } else if (ui16_motor_speed_erps > 3 && ui16_BatteryCurrent < ui16_current_cal_b - 3) {    //regen
+    } else if (ui16_motor_speed_erps > 3 && ui16_battery_current < ui16_current_cal_b - 3) {    //regen
         ui8_position_correction_value = 127;         //set advance angle to neutral value
     } else if (ui16_motor_speed_erps < 3) {
         ui8_position_correction_value = 127;         //reset advance angle at very low speed)

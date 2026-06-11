@@ -115,8 +115,8 @@ void addConfigStateInfosA(void) {
 
     // float casts might be costly but they are only requested once every 10 seconds
     addPayload(CODE_ERPS_FACTOR, ui8_gear_ratio);
-    addPayload(CODE_WHEEL_CIRCUMFENCE_HIGH_BYTE, WHEEL_CIRCUMFERENCE >>8);
-    addPayload(CODE_WHEEL_CIRCUMFENCE, WHEEL_CIRCUMFERENCE);
+    addPayload(CODE_WHEEL_CIRCUMFENCE_HIGH_BYTE, WHEEL_CIRCUMFERENCE_MM >>8);
+    addPayload(CODE_WHEEL_CIRCUMFENCE, WHEEL_CIRCUMFERENCE_MM);
     addPayload(CODE_CURRENT_CAL_A, ui8_current_cal_a);
     addPayload(CODE_CURRENT_CAL_B_HIGH_BYTE, ui16_current_cal_b >> 8);
     addPayload(CODE_CURRENT_CAL_B, ui16_current_cal_b);
@@ -135,8 +135,8 @@ void addConfigStateInfosA(void) {
     addPayload(CODE_TQ_CALIB, float2int(flt_torquesensorCalibration, 8000.0));
     addPayload(CODE_RAMP_END, ui16_s_ramp_end >> 5);
     addPayload(CODE_RAMP_START, ui16_s_ramp_start >> 6);
-    addPayload(CODE_MAX_BAT_CURRENT_HIGH_BYTE, ui16_battery_current_max_value >> 8);
-    addPayload(CODE_MAX_BAT_CURRENT, ui16_battery_current_max_value);
+    addPayload(CODE_MAX_BAT_CURRENT_HIGH_BYTE, ui16_battery_current_max >> 8);
+    addPayload(CODE_MAX_BAT_CURRENT, ui16_battery_current_max);
     addPayload(CODE_CORRECTION_AT_ANGLE, ui8_correction_at_angle);
 
     // 5 more elements left/avail (max30)
@@ -228,10 +228,10 @@ void addBasicStateInfos(void) {
     addPayload(CODE_BATTERY_VOLTAGE, ui8_BatteryVoltage);
     addPayload(CODE_ER_SPEED_HIGH_BYTE, ui16_motor_speed_erps >> 8);
     addPayload(CODE_ER_SPEED, ui16_motor_speed_erps);
-    addPayload(CODE_SENSOR_RPKS_HIGH_BYTE, ui16_wheel_rotation_per_msec >> 8);
-    addPayload(CODE_SENSOR_RPKS, ui16_wheel_rotation_per_msec);
-    addPayload(CODE_BATTERY_CURRENT_HIGH_BYTE, ui16_BatteryCurrent >> 8);
-    addPayload(CODE_BATTERY_CURRENT, ui16_BatteryCurrent);
+    addPayload(CODE_SENSOR_RPKS_HIGH_BYTE, ui16_wheel_rotation_per_ms >> 8);
+    addPayload(CODE_SENSOR_RPKS, ui16_wheel_rotation_per_ms);
+    addPayload(CODE_BATTERY_CURRENT_HIGH_BYTE, ui16_battery_current >> 8);
+    addPayload(CODE_BATTERY_CURRENT, ui16_battery_current);
     addPayload(CODE_SUM_TORQUE, ui16_sum_torque);
     addPayload(CODE_SUM_THROTTLE, ui16_sum_throttle);
     addPayload(CODE_SETPOINT, ui16_setpoint);
@@ -328,13 +328,13 @@ void digestConfigRequest(uint8_t configAddress, uint8_t requestedCodeLowByte, ui
         addPayload(requestedCodeLowByte, ui16_aca_experimental_flags);
         break;
     case CODE_MAX_BAT_CURRENT:
-        ui16_battery_current_max_value = ((uint16_t) requestedValueHighByte << 8)+(uint16_t) requestedValue;
+        ui16_battery_current_max = ((uint16_t) requestedValueHighByte << 8)+(uint16_t) requestedValue;
         if (configAddress == EEPROM_ADDRESS) {
             eeprom_write(OFFSET_BATTERY_CURRENT_MAX_VALUE_HIGH_BYTE, requestedValueHighByte);
             eeprom_write(OFFSET_BATTERY_CURRENT_MAX_VALUE, requestedValue);
         }
-        addPayload(CODE_MAX_BAT_CURRENT_HIGH_BYTE, ui16_battery_current_max_value >> 8);
-        addPayload(requestedCodeLowByte, ui16_battery_current_max_value);
+        addPayload(CODE_MAX_BAT_CURRENT_HIGH_BYTE, ui16_battery_current_max >> 8);
+        addPayload(requestedCodeLowByte, ui16_battery_current_max);
         break;
     case CODE_MAX_REGEN_CURRENT:
         ui16_regen_current_max_value = requestedValue;

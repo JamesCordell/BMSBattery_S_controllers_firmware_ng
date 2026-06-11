@@ -125,7 +125,7 @@ uint8_t readAndClearSignal(uint8_t signal) {
 
 void initErpsRatio(void) {
     //if (readAndClearSignal(SIGNAL_SPEEDLIMIT_CHANGED) == 1)
-    ui16_speed_kph_to_erps_ratio = (uint16_t) ((float) ui8_gear_ratio * 1000000.0 / ((float) WHEEL_CIRCUMFERENCE * 36.0));
+    ui16_speed_kph_to_erps_ratio = (uint16_t) ((float) ui8_gear_ratio * 1000000.0 / ((float) WHEEL_CIRCUMFERENCE_MM * 36.0));
 }
 
 void updateHallOrder(uint8_t hall_sensors) {
@@ -137,7 +137,7 @@ void updateHallOrder(uint8_t hall_sensors) {
 }
 
 void updatePasDir(void) {
-    if (((ui16_aca_flags & TQ_SENSOR_MODE) == TQ_SENSOR_MODE)&&(ui16_time_ticks_between_pas_interrupt < timeout)) {
+    if (((ui16_aca_flags & TQ_SENSOR_MODE) == TQ_SENSOR_MODE)&&(ui16_time_ticks_between_pas_interrupt < IDLE_TIMEOUT)) {
         //only for Torquesensor Mode.
         PAS_is_active = 1;
     } else if (((ui16_aca_flags & TQ_SENSOR_MODE) != TQ_SENSOR_MODE) && (PAS_act > 3)) {
@@ -187,7 +187,7 @@ void updateRequestedTorque(void) {
 
 void checkPasInActivity(void) {
     ui8_PAS_update_call_when_inactive_counter++;
-    if (ui16_time_ticks_for_pas_calculation > timeout) {
+    if (ui16_time_ticks_for_pas_calculation > IDLE_TIMEOUT) {
         // updatePasStatus does not fire if pas inactive, so set interval to reasonably high value here
         ui16_time_ticks_between_pas_interrupt = 64000L;
         // also ensure torque array slowly resets
@@ -199,7 +199,7 @@ void checkPasInActivity(void) {
 
     }
     // we are called at 50 Hz, if there has been no interrupt for more than ~1s, ramp down PAS automatically
-    if (ui8_PAS_Flag == 0 && ui8_PAS_update_call_when_inactive_counter > (uint8_t) (timeout >> 6)) {
+    if (ui8_PAS_Flag == 0 && ui8_PAS_update_call_when_inactive_counter > (uint8_t) (IDLE_TIMEOUT >> 6)) {
 
         ui8_PAS_update_call_when_inactive_counter = 0;
 

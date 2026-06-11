@@ -11,13 +11,13 @@
 /* Unless there is a L in the number all values can only be a minimum of 0 through to 255*/
 
 #define NUMBER_OF_PAS_MAGS 12                   // The number of magnets on the crank used by the PAS sensor.
-#define WHEEL_CIRCUMFERENCE 2010L               // The distance in mm the wheel covers in one revolution.
-#define limit 80                                // Overall maximum speed limit, all speeds are in k/h
-#define limit_with_throttle_override 80
+#define WHEEL_CIRCUMFERENCE_MM 2010L               // The distance in mm the wheel covers in one revolution. This is not used for LCD display speed calculations.
+#define SPEED_LIMIT_KPH 80                                // Overall maximum speed limit, all speeds are in k/h
+#define LIMIT_WITH_THROTTLE_OVERRIDE 80
 #define limit_without_pas 80                    // The speed limit without pedal asssit.
-#define timeout 3125U
+#define IDLE_TIMEOUT 200U                      // deciseconds
 
-#define ADC_THROTTLE_MIN_VALUE 48               // The Miinimum throttle value
+#define ADC_THROTTLE_MIN_VALUE 48               // The Minimum throttle value
 #define ADC_THROTTLE_MAX_VALUE 181              // The Maximum throttle value
 #define DO_CRUISE_CONTROL 0                     // Cruise control
 
@@ -53,7 +53,7 @@
 #define CORRECTION_AT_ANGLE 127
 
 /* Set one type of display type. */
-//#define DISPLAY_TYPE_KT_LCD3
+#define DISPLAY_TYPE_KT_LCD3
 //#define BLUOSEC                               // Bluetooth on the serial port and phone app.
 
 /* enable these lines to set this display type.
@@ -61,7 +61,7 @@
  #define DISPLAY_TYPE_KINGMETER (DISPLAY_TYPE_KINGMETER_618U|DISPLAY_TYPE_KINGMETER_901U)
  #define DISPLAY_TYPE DISPLAY_TYPE_KINGMETER     // Set your display type here. CHANGES ONLY HERE!
  */
-#define DIAGNOSTICS                             // Serial 9600 8N1
+//#define DIAGNOSTICS                             // Serial 9600 8N1
 
 #define ANGLE_4_0 1
 #define ANGLE_6_60 43

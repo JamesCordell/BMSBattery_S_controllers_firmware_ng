@@ -183,24 +183,23 @@ int main(void) {
 
                 #ifdef DIAGNOSTICS
                 //uint32_torquesensorCalibration=80;
-                printf("sp:%u cs:%u, ct:%u, pas:%u, bc:%u, bv:%u st:%u, tq:cal%u, mserps:%u, th:%u pBc:%u wrpms:%u wrps:%u st:%u verps:%u assist:%d l:%u temp:%i\r\n",
+                printf("sp:%u cs:%u, ct:%u, pas:%u, bc:%u, bv:%u st:%u, tq:cal%u, mserps:%u, th:%u pBc:%u wrpms:%u st:%u verps:%u assist:%d l:%u temp:%i\r\n",
                        ui16_setpoint,
                        ui16_control_state,
                        (uint16_t) uint32_current_target,
                        PAS_is_active,
-                       ui16_BatteryCurrent,
+                       ui16_battery_current,
                        ui8_adc_read_battery_voltage(),
                        ui16_sum_torque,
                        (uint16_t)uint32_torquesensorCalibration,
                        ui16_motor_speed_erps,
                        ui8_adc_read_throttle(),
                        ui8_adc_read_phase_B_current(),
-					   ui16_wheel_rotation_per_msec,
-                       ui8_wheel_rotation_per_sec,
+					   ui16_wheel_rotation_per_ms,
                        ui16_sum_throttle,
                        ui16_virtual_erps_speed,
                        (int)ui8_assistlevel_global,
-                       ui16_wheel_period_ms,
+
                        ui16_adc_read_x4_value()
                        );
 

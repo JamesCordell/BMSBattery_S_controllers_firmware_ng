@@ -81,7 +81,7 @@ uint16_t ui16_current_cal_b = 0;
 uint16_t ui16_x4_cal_b = 0;
 uint16_t ui16_x4_value = 0;
 uint16_t ui16_throttle_cal_b = 0;
-uint16_t ui16_battery_current_max_value = 0;
+uint16_t ui16_battery_current_max = 0;
 uint16_t ui16_regen_current_max_value = 0;
 uint8_t  ui8_possible_motor_state = 0;
 uint8_t  ui8_dynamic_motor_state = 0;
@@ -90,7 +90,7 @@ uint8_t  ui8_battery_voltage_nominal = 0;
 uint16_t ui16_motor_speed_erps = 0;
 uint32_t ui32_erps_filtered = 0; //filtered value of erps
 uint16_t ui16_virtual_erps_speed = 0;
-uint16_t ui16_BatteryCurrent = 0; //Battery Current read from ADC8
+uint16_t ui16_battery_current = 0; //Battery Current read from ADC8
 uint8_t  ui8_position_correction_value = 127; // in 360/256 degrees
 uint8_t  ui8_correction_at_angle = 127;
 uint16_t ui16_ADC_iq_current = 0;
@@ -161,10 +161,10 @@ void controllerstate_init(void) {
     ui8_s_battery_voltage_calibration = ADC_BATTERY_VOLTAGE_K;
     ui8_s_battery_voltage_min = BATTERY_VOLTAGE_MIN_VALUE;
     ui8_s_battery_voltage_max = BATTERY_VOLTAGE_MAX_VALUE;
-    ui8_speedlimit_kph = limit;
+    ui8_speedlimit_kph = SPEED_LIMIT_KPH;
     ui8_speedlimit_without_pas_kph = limit_without_pas;
-    ui8_speedlimit_with_throttle_override_kph = limit_with_throttle_override;
-    ui8_speedlimit_actual_kph = limit;
+    ui8_speedlimit_with_throttle_override_kph = LIMIT_WITH_THROTTLE_OVERRIDE;
+    ui8_speedlimit_actual_kph = SPEED_LIMIT_KPH;
     ui8_throttle_min_range = ADC_THROTTLE_MIN_VALUE;
     ui8_throttle_max_range = ADC_THROTTLE_MAX_VALUE;
     flt_s_pas_threshold = PAS_THRESHOLD;
@@ -179,7 +179,7 @@ void controllerstate_init(void) {
     ui8_s_hall_angle3_180 = ANGLE_3_180;
     ui8_s_hall_angle1_240 = ANGLE_1_240;
     ui8_s_hall_angle5_300 = ANGLE_5_300;
-    ui16_battery_current_max_value = BATTERY_CURRENT_MAX_VALUE;
+    ui16_battery_current_max = BATTERY_CURRENT_MAX_VALUE;
     ui16_regen_current_max_value = REGEN_CURRENT_MAX_VALUE;
     ui8_current_cal_a = current_cal_a;
     ui8_correction_at_angle = CORRECTION_AT_ANGLE;
@@ -190,7 +190,7 @@ void controllerstate_init(void) {
     // read in overrides from eeprom if they are > 0, assuming 0s are uninitialized
     eepromHighVal = eeprom_read(OFFSET_BATTERY_CURRENT_MAX_VALUE_HIGH_BYTE);
     eepromVal = eeprom_read(OFFSET_BATTERY_CURRENT_MAX_VALUE);
-    if (eepromVal > 0 || eepromHighVal > 0) ui16_battery_current_max_value = ((uint16_t) eepromHighVal << 8) + (uint16_t) eepromVal;
+    if (eepromVal > 0 || eepromHighVal > 0) ui16_battery_current_max = ((uint16_t) eepromHighVal << 8) + (uint16_t) eepromVal;
 
     eepromHighVal = eeprom_read(OFFSET_PASSCODE_HIGH_BYTE);
     eepromVal = eeprom_read(OFFSET_PASSCODE);

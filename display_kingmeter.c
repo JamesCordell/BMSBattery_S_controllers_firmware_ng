@@ -118,7 +118,7 @@ void KingMeter_Init(KINGMETER_t* KM_ctx){
     KM_ctx->Settings.SYS_SSP_SlowStart = 1;
     KM_ctx->Settings.SPS_SpdMagnets = (uint8_t) wheel_magnets;
     KM_ctx->Settings.VOL_1_UnderVolt_x10 = (uint16_t) (vcutoff * 10);
-    KM_ctx->Settings.WheelSize_mm = (uint16_t) (WHEEL_CIRCUMFERENCE * 1000); // Wheel circumference is already in mm so I dont know why * 1000
+    KM_ctx->Settings.WheelSize_mm = (uint16_t) (WHEEL_CIRCUMFERENCE_MM * 1000); // Wheel circumference is already in mm so I dont know why * 1000
 
     // Parameters received from display in operation mode:
     KM_ctx->Rx.AssistLevel = 1;
@@ -432,8 +432,8 @@ void kingmeter_update(void) {
 
     KM.Tx.Error = KM_ERROR_NONE;
 
-    if (((ui8_current_cal_a * ui16_BatteryCurrent) / 100 - ui16_current_cal_b) != 0x99) {
-        KM.Tx.Current_x10 = (ui8_current_cal_a * ui16_BatteryCurrent) / 100 - ui16_current_cal_b;         //calculate Amps out of 10bit ADC value
+    if (((ui8_current_cal_a * ui16_battery_current) / 100 - ui16_current_cal_b) != 0x99) {
+        KM.Tx.Current_x10 = (ui8_current_cal_a * ui16_battery_current) / 100 - ui16_current_cal_b;         //calculate Amps out of 10bit ADC value
     }
 
     /* Receive Rx parameters/settings and send Tx parameters */

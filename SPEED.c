@@ -13,8 +13,7 @@
 #include "SPEED.h"
 #include "config.h"
 
-volatile uint16_t ui16_wheel_rotation_per_msec = UINT16_MAX;
-volatile uint8_t  ui8_wheel_rotation_per_sec = 0;
+volatile uint16_t ui16_wheel_rotation_per_ms = UINT16_MAX; // Milliseconds
 
 void timer3_init(void) {
     // 1. Enable peripheral clock for TIM3
@@ -23,7 +22,7 @@ void timer3_init(void) {
     // Prescaler: 2^14 = 16,384. (16MHz / 16384 = 976.5Hz)
     TIM3->PSCR = 0x0E; 
 
-    // Max out ARR so it counts all the way to 65535 milliseconds before resetting
+    // Max out ARR so it counts all the way to 65535 before resetting
     TIM3->ARRH = 0xFF;
     TIM3->ARRL = 0xFF;
 
@@ -49,17 +48,15 @@ void EXTI_PORTC_IRQHandler(void) __interrupt(EXTI_PORTC_IRQHANDLER)
     if ((TIM3->CR1 & TIM3_CR1_CEN) == 0) {
         // The wheel took longer than 65 seconds. 
         // You can set this to 0xFFFF or 0 depending on how you want to handle a stopped wheel.
-        ui16_wheel_rotation_per_msec = 0xFFFF; 
+        ui16_wheel_rotation_per_ms = 0xFFFF;
     }
     // 3. Software Debounce check
     // If the time is less than 10ms, it's physically impossible for the wheel 
     // to have made a full rotation. It must be switch bounce noise! Ignore it.
     else if (current_time > 10) {
         // Valid rotation! Save the time.
-        ui16_wheel_rotation_per_msec = current_time;
+        ui16_wheel_rotation_per_ms = current_time;
     }
-
-    ui8_wheel_rotation_per_sec = 976 / ui16_wheel_rotation_per_msec;
 
     TIM3->EGR |= TIM3_EGR_UG; 
 

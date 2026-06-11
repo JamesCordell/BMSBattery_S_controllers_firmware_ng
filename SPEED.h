@@ -11,7 +11,6 @@
 
 void SPEED_init (void);
 
-extern volatile uint16_t ui16_wheel_rotation_per_msec;
-extern volatile uint8_t ui8_wheel_rotation_per_sec;
+extern volatile uint16_t ui16_wheel_rotation_per_ms;
 
 #endif /* _SPEED_H */
